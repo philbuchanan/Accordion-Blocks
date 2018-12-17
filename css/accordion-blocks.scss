@@ -1,0 +1,59 @@
+// # Variables
+// -----------------------------------------------------------------------------
+
+$color-border:    #ddd;
+$color-open-icon: #777;
+
+
+
+// # Accordion Default Styles
+// -----------------------------------------------------------------------------
+
+// Force all content open if there is no JS.
+.no-js {
+	.c-accordion__content {
+		display: block !important;
+	}
+
+	.c-accordion__title {
+		padding-right: none;
+		cursor: default;
+
+		&:after {
+			display: none;
+		}
+	}
+}
+
+// Only apply styles if the user has opted-in to them
+.c-accordion__title {
+	position: relative;
+	padding-right: 2rem;
+	cursor: pointer;
+
+	&:after {
+		position: absolute;
+		top: 50%;
+		right: 0;
+		content: "+";
+		color: $color-open-icon;
+		font-weight: 300;
+		-webkit-transform: translateY(-50%);
+		        transform: translateY(-50%);
+	}
+}
+
+.is-open {
+	.c-accordion__title {
+		&:after {
+			content: "\2212";
+		}
+	}
+}
+
+// Make all the content visible when printing the page.
+@media print {
+	.c-accordion__content {
+		display: block !important;
+	}
+}
