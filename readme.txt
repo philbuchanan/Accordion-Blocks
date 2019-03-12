@@ -4,7 +4,7 @@ Author URI: https://philbuchanan.com/
 Donate Link: https://philbuchanan.com/
 Tags: accordion, accordions, gutenberg, blocks, responsive accordions, accordions plugin, jquery accordions, accordions plugin wordpress, accordions plugin jquery
 Requires at least: 5.0
-Tested up to: 5.0
+Tested up to: 5.1
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -31,18 +31,18 @@ The accordions should blend seamlessly with your theme. However, you may want to
 * Disable auto closing of accordion items.
 * Manually close items by clicking the title again.
 * Scroll page to title when it's clicked open (including setting a scroll offset position).
-* Set the HTML heading tag for the title element (h1–h6, p, div)
+* Set the HTML heading tag for the title element (h1–h4, button).
 
 = Output =
 
 The plugin will ultimately output following HTML (simplified for this example):
 
-    <div class="wp-block-pb-accordion c-accordion">
-        <div class="wp-block-pb-accordion-item c-accordion__item">
-            <h2 class="c-accordion__title">Title of Accordion Item</h2>
-            <div class="c-accordion__content">
-                <p>Drop-down content goes here.</p>
-            </div>
+    <div class="wp-block-pb-accordion-item c-accordion__item js-accordion-item" data-initially-open="false" data-click-to-close="true" data-auto-close="true" data-scroll="false" data-scroll-offset="0">
+        <h2 id="at-76840" class="c-accordion__title js-accordion-controller" tabindex="0" role="button" aria-controls="ac-76840" aria-expanded="false">
+            Title with H2 tag
+        </h2>
+        <div id="ac-76840" class="c-accordion__content" style="display:none" aria-hidden="true">
+            <p>Content</p>
         </div>
     </div>
 
@@ -50,11 +50,11 @@ The plugin will ultimately output following HTML (simplified for this example):
 
 You can use the following CSS classes to customize the look of the accordion.
 
-    .c-accordion {} /* The accordion group container */
     .c-accordion__item {} /* The accordion item container */
     .c-accordion__item.is-open {} /* is-open is added to open accordion items */
     .c-accordion__item.is-read {} /* is-read is added to accordion items that have been opened at least once */
     .c-accordion__title {} /* An accordion item title */
+    .c-accordion__title--button {} /* An accordion item title that is using a `<button>` tag */
     .c-accordion__title:hover {} /* To modify the style when hovering over an accordion item title */
     .c-accordion__title:focus {} /* To modify the style when an accordion item title currently has broswer focus */
     .c-accordion__content {} /* An accordion item content container */
@@ -75,9 +75,15 @@ This is most likely caused by a poorly coded theme. This plugin makes use of the
 For bug reports or feature requests or if you'd like to contribute to the plugin you can check everything out on [Github](https://github.com/philbuchanan/Accordion-Blocks/).
 
 == Changelog ==
+= 1.0.1 =
+* Updated readme.
+
 = 1.0.0 =
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.0.1 =
+Updated readme.
+
 = 1.0.0 =
 ALL NEW plugin to support the new WordPress Gutenberg editor.
