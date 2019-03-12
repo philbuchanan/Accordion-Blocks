@@ -11,6 +11,35 @@
   display: none;
 }
 
+.c-accordion__title--button {
+  display: inline-block;
+  color: inherit;
+  background-color: transparent;
+  text-align: left;
+  vertical-align: middle;
+  font: inherit;
+  text-decoration: none;
+  direction: ltr;
+  border: none;
+  border-radius: 0;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  transition: 0;
+  box-shadow: none;
+  overflow: auto;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.c-accordion__title--button:focus,
+.c-accordion__title--button:hover {
+  color: inherit;
+  background-color: transparent;
+}
+
 .c-accordion__title {
   position: relative;
   padding-right: 2rem;

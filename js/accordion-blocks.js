@@ -12,14 +12,6 @@
 	 * @param object options Plugin settings to override the defaults
 	 */
 	$.fn.accordionBlockItem = function(options) {
-		var item = {
-			self:    $(this),
-			id:      $(this).attr('id'),
-			title:   $(this).children('.c-accordion__title'),
-			content: $(this).children('.c-accordion__content'),
-		};
-		var hashID   = window.location.hash.replace('#', '');
-		var duration = 250;
 		var settings = $.extend({
 			// Set default settings
 			initiallyOpen: false,
@@ -28,6 +20,16 @@
 			scroll:        false,
 			scrollOffset:  false,
 		}, options);
+
+		var duration = 250;
+		var hashID = window.location.hash.replace('#', '');
+
+		var item = {};
+
+		item.self       = $(this);
+		item.id         = $(this).attr('id');
+		item.controller = $(this).children('.js-accordion-controller');
+		item.content    = $('#' +  item.controller.attr('aria-controls'));
 
 
 
@@ -75,7 +77,7 @@
 
 		/**
 		 * Defualt click function
-		 * Called when an accordion title is clicked.
+		 * Called when an accordion controller is clicked.
 		 */
 		function clickHandler() {
 			// Only open the item if item isn't already open
@@ -123,13 +125,12 @@
 		 * Mark accordion item as open and read and set aria attributes.
 		 */
 		function setOpenItemAttributes() {
-			item.self.addClass('is-open is-read')
-			.children('.c-accordion__title').attr({
-				'aria-selected': 'true',
-				'aria-expanded': 'true'
-			})
-			.next().attr({
-				'aria-hidden': 'false'
+			item.self.addClass('is-open is-read');
+			item.controller.attr({
+				'aria-expanded': 'true',
+			});
+			item.content.attr({
+				'aria-hidden': 'false',
 			});
 		}
 
@@ -153,13 +154,12 @@
 		 * Mark accordion item as closed and set aria attributes.
 		 */
 		function setCloseItemAttributes() {
-			item.self.removeClass('is-open')
-			.children('.c-accordion__title').attr({
-				'aria-selected': 'false',
-				'aria-expanded': 'false'
-			})
-			.next().attr({
-				'aria-hidden': 'true'
+			item.self.removeClass('is-open');
+			item.controller.attr({
+				'aria-expanded': 'false',
+			});
+			item.content.attr({
+				'aria-hidden': 'true',
 			});
 		}
 
@@ -179,7 +179,7 @@
 		/**
 		 * Add event listeners
 		 */
-		item.title.click(clickHandler);
+		item.controller.click(clickHandler);
 
 
 
@@ -189,19 +189,26 @@
 		 * The `openAccordionItem` event is fired whenever an accordion item is
 		 * opened after initial plugin setup.
 		 */
-		$(document).on('openAccordionItem', function(e, ele) {
+		$(document).on('openAccordionItem', function(event, ele) {
 			if (ele !== item) {
 				maybeCloseItem();
 			}
 		});
 
-		item.title.keydown(function(e) {
-			var code = e.which;
+		item.controller.keydown(function(event) {
+			var code = event.which;
 
-			// 13 = Return, 32 = Space
-			if ((code === 13) || (code === 32)) {
-				// Simulate click on title
-				$(this).click();
+			if (item.controller.prop('tagName') !== 'BUTTON') {
+				// 13 = Return, 32 = Space
+				if ((code === 13) || (code === 32)) {
+					// Simulate click on the controller
+					$(this).click();
+				}
+			}
+
+			// 27 = Esc
+			if (code === 27) {
+				maybeCloseItem();
 			}
 		});
 
