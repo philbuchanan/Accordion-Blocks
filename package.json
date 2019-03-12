@@ -5,7 +5,7 @@
   "main": "js/accordion-blocks.js",
   "scripts": {
     "dev": "webpack --watch",
-    "build": "cross-env NODE_ENV=production webpack"
+    "build": "NODE_ENV=production webpack"
   },
   "author": "pbuchanan",
   "license": "ISC",
