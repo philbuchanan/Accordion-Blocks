@@ -175,6 +175,15 @@ registerBlockType('pb/accordion-item', {
 			titleClasses.push('c-accordion__title--button');
 		}
 
+		var itemClasses = [
+			'c-accordion__item',
+			'js-accordion-item',
+			'no-js',
+		];
+
+		// Ensure we are able to use any CSS class passed to the block.
+		itemClasses = [...itemClasses, props.attributes.className];
+
 		return  (
 			<Fragment>
 				<BlockControls>
@@ -238,7 +247,7 @@ registerBlockType('pb/accordion-item', {
 						/>
 					</PanelBody>
 				</InspectorControls>
-				<div className="c-accordion__item">
+				<div className={ itemClasses.join(' ') }>
 					<RichText
 						className={ titleClasses.join(' ') }
 						tagName={ titleTag }
@@ -285,6 +294,9 @@ registerBlockType('pb/accordion-item', {
 			'js-accordion-item',
 			'no-js',
 		];
+
+		// Ensure we are able to use any CSS class passed to the block.
+		itemClasses = [...itemClasses, props.attributes.className];
 
 		var titleClasses = [
 			'c-accordion__title',
