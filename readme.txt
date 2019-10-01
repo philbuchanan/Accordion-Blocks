@@ -75,7 +75,8 @@ This is most likely caused by a poorly coded theme. This plugin makes use of the
 For bug reports or feature requests or if you'd like to contribute to the plugin you can check everything out on [Github](https://github.com/philbuchanan/Accordion-Blocks/).
 
 == Changelog ==
-= 1.0.1 =
+= 1.0.2 =
+* Added the ability for the block in the editor to accept custom css classes (allows for custom registration of Block Styles)
 * Accessibility fix: Removed aria-hidden=false from closed accordions.
 
 = 1.0.1 =
@@ -85,8 +86,8 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
-= 1.0.1 =
-Includes accessibility fixes.
+= 1.0.2 =
+Added the ability for the block in the editor to accept custom css classes (allows for custom registration of Block Styles).
 
 = 1.0.1 =
 Updated readme.
