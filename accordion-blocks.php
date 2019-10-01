@@ -67,7 +67,7 @@ class PB_Accordion_Blocks {
 	public function enqueue_block_editor_assets() {
 		wp_enqueue_script(
 			'pb-accordion-blocks-item-editor-script',
-			plugins_url('blocks/accordion-item.build.js', __FILE__),
+			plugins_url('build/index.js', __FILE__),
 			array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor', 'underscore'),
 			$this->plugin_version
 		);
@@ -75,7 +75,7 @@ class PB_Accordion_Blocks {
 		// Styles
 		wp_enqueue_style(
 			'pb-accordion-blocks-editor-styles',
-			plugins_url('blocks/css/editor.css', __FILE__),
+			plugins_url('css/editor.css', __FILE__),
 			array('wp-edit-blocks'),
 			$this->get_plugin_version()
 		);
