@@ -4,8 +4,8 @@ Author URI: https://philbuchanan.com/
 Donate Link: https://philbuchanan.com/
 Tags: accordion, accordions, gutenberg, blocks, responsive accordions, accordions plugin, jquery accordions, accordions plugin wordpress, accordions plugin jquery
 Requires at least: 5.0
-Tested up to: 5.1
-Stable tag: 1.0.1
+Tested up to: 5.3
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,12 +76,18 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 
 == Changelog ==
 = 1.0.1 =
+* Accessibility fix: Removed aria-hidden=false from closed accordions.
+
+= 1.0.1 =
 * Updated readme.
 
 = 1.0.0 =
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.0.1 =
+Includes accessibility fixes.
+
 = 1.0.1 =
 Updated readme.
 

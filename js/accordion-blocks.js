@@ -129,9 +129,7 @@
 			item.controller.attr({
 				'aria-expanded': 'true',
 			});
-			item.content.attr({
-				'aria-hidden': 'false',
-			});
+			item.content.removeAttr('aria-hidden');
 		}
 
 
