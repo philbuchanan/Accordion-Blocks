@@ -2,7 +2,7 @@
   "name": "accordion-blocks",
   "version": "1.0.2",
   "description": "Gutenberg blocks for creating responsive accordion drop-downs.",
-  "main": "src/accordion-blocks.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "wp-scripts start",
     "build": "wp-scripts build"
