@@ -5,7 +5,7 @@ Donate Link: https://philbuchanan.com/
 Tags: accordion, accordions, gutenberg, blocks, responsive accordions, accordions plugin, jquery accordions, accordions plugin wordpress, accordions plugin jquery
 Requires at least: 5.0
 Tested up to: 5.3
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,9 @@ This is most likely caused by a poorly coded theme. This plugin makes use of the
 For bug reports or feature requests or if you'd like to contribute to the plugin you can check everything out on [Github](https://github.com/philbuchanan/Accordion-Blocks/).
 
 == Changelog ==
+= 1.0.3 =
+* Added the ability to convert a paragraph or heading into an accordion.
+
 = 1.0.2 =
 * Added the ability for the block in the editor to accept custom css classes (allows for custom registration of Block Styles)
 * Accessibility fix: Removed aria-hidden=false from closed accordions.
@@ -86,6 +89,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.0.3 =
+Added the ability to convert a paragraph or heading into an accordion.
+
 = 1.0.2 =
 Added the ability for the block in the editor to accept custom css classes (allows for custom registration of Block Styles).
 

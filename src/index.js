@@ -17,6 +17,8 @@ const {
  */
 import settings from './settings';
 
+import transforms from './transforms';
+
 import edit from './edit';
 
 
@@ -24,13 +26,14 @@ import edit from './edit';
 registerBlockType('pb/accordion-item', {
 	...settings,
 
+	transforms,
+
 	edit,
 
 	save: ({ attributes }) => {
 		const {
 			className,
 			title,
-			content,
 			initiallyOpen,
 			clickToClose,
 			autoClose,

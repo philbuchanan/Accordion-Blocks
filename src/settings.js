@@ -31,11 +31,6 @@ export default {
 			source: 'children',
 			selector: '.c-accordion__title',
 		},
-		content: {
-			type: 'array',
-			source: 'children',
-			selector: '.c-accordion__content',
-		},
 		initiallyOpen: {
 			type: 'boolean',
 			default: false,
