@@ -26,5 +26,17 @@ export default {
 				});
 			},
 		},
+		{
+			type: 'block',
+			isMultiBlock: true,
+			blocks: ['core/paragraph'],
+			transform: (attributes) => {
+				return createBlock('pb/accordion-item', {}, attributes.map(
+					item => createBlock('core/paragraph', {
+						content: item.content
+					})
+				));
+			},
+		},
 	],
 };
