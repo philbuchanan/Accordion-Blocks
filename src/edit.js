@@ -43,7 +43,6 @@ const AccordionItemEdit = ({
 }) => {
 	const {
 		title,
-		content,
 		initiallyOpen,
 		clickToClose,
 		autoClose,
