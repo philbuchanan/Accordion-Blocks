@@ -67,7 +67,6 @@ const AccordionItemEdit = ({
 	var itemClasses = [
 		'c-accordion__item',
 		'js-accordion-item',
-		'no-js',
 	];
 
 	return  (

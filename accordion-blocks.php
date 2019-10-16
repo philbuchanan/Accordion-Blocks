@@ -33,14 +33,11 @@ class PB_Accordion_Blocks {
 		// Load text domain
 		load_plugin_textdomain('accordion_blocks', false, dirname($basename) . '/languages/');
 
-		// Register blocks JavaScript
-		add_action('enqueue_block_editor_assets', array($this, 'enqueue_block_editor_assets'));
+		// Register block
+		add_action('init', array($this, 'register_block'));
 
 		// Register frontend JavaScript
-		add_action('wp_enqueue_scripts', array($this, 'register_script'));
-
-		add_action('enqueue_block_assets', array($this, 'enqueue_block_assets'));
-
+		add_action('enqueue_block_assets', array($this, 'enqueue_frontend_assets'));
 
 		if (is_admin()) {
 			// Add link to documentation on plugin page
@@ -62,23 +59,32 @@ class PB_Accordion_Blocks {
 
 
 	/**
-	 * Enqueue the block's assets for the wp-admin editor
+	 * Register the block's assets for the editor
 	 */
-	public function enqueue_block_editor_assets() {
-		wp_enqueue_script(
-			'pb-accordion-blocks-item-editor-script',
+	public function register_block() {
+		// Automatically load dependencies and version
+		$asset_file = include(plugin_dir_path(__FILE__) . 'build/index.asset.php');
+
+		wp_register_script(
+			'pb-accordion-blocks-script',
 			plugins_url('build/index.js', __FILE__),
-			array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor', 'underscore'),
-			$this->plugin_version
+			array_merge($asset_file['dependencies'], array(
+				'wp-block-editor',
+			)),
+			$asset_file['version']
 		);
 
-		// Styles
-		wp_enqueue_style(
-			'pb-accordion-blocks-editor-styles',
-			plugins_url('css/editor.css', __FILE__),
-			array('wp-edit-blocks'),
+		wp_register_style(
+			'pb-accordion-blocks-style',
+			plugins_url('css/accordion-blocks.css', __FILE__),
+			array(),
 			$this->get_plugin_version()
 		);
+
+		register_block_type('pb/accordion-blocks', array(
+			'editor_script' => 'pb-accordion-blocks-script',
+			'style'         => 'pb-accordion-blocks-style',
+		));
 	}
 
 
@@ -86,21 +92,7 @@ class PB_Accordion_Blocks {
 	/**
 	 * Enqueue the block's assets for the frontend
 	 */
-	public function enqueue_block_assets() {
-		wp_enqueue_style(
-			'pb-accordion-blocks-frontend-style',
-			plugins_url('css/accordion-blocks.css', __FILE__),
-			array(),
-			$this->plugin_version
-		);
-	}
-
-
-
-	/**
-	 * Registers the frontend JavaScript file
-	 */
-	public function register_script() {
+	public function enqueue_frontend_assets() {
 		wp_enqueue_script(
 			'pb-accordion-blocks-frontend-script',
 			plugins_url('js/accordion-blocks.js', __FILE__),

@@ -10,6 +10,6 @@
   "author": "pbuchanan",
   "license": "ISC",
   "devDependencies": {
-    "@wordpress/scripts": "5.0.1"
+    "@wordpress/scripts": "5.1.0"
   }
 }
