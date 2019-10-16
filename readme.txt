@@ -76,6 +76,7 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 
 == Changelog ==
 = 1.0.4 =
+* Made plugin translatable
 * Code cleanup
 
 = 1.0.3 =
@@ -93,7 +94,7 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 
 == Upgrade Notice ==
 = 1.0.4 =
-Minor code cleanup.
+Made plugin translatable.
 
 = 1.0.3 =
 Added the ability to convert a paragraph or heading into an accordion.
