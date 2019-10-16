@@ -5,13 +5,6 @@ const {
 	createBlock,
 } = wp.blocks;
 
-const {
-	create,
-	join,
-	split,
-	toHTMLString,
-} = wp.richText;
-
 
 
 export default {
