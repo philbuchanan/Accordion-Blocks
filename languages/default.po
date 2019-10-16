@@ -1,0 +1,89 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Accordion Blocks\n"
+"POT-Creation-Date: 2019-10-16 11:34-0400\n"
+"PO-Revision-Date: 2019-10-16 11:35-0400\n"
+"Last-Translator: Phil Buchanan <info@philbuchanan.com>\n"
+"Language-Team: Phil Buchanan\n"
+"Language: en_CA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../accordion-blocks.php:114
+msgctxt "link to documentation on wordpress.org site"
+msgid "Documentation"
+msgstr ""
+
+#: ../src/edit.js:87
+msgid "Accordion Item Settings"
+msgstr ""
+
+#: ../src/edit.js:89
+msgid "Open By Default"
+msgstr ""
+
+#: ../src/edit.js:90
+msgid "This accordion item will be open when the page loads."
+msgstr ""
+
+#: ../src/edit.js:90
+msgid "This accordion item will be closed when the page loads."
+msgstr ""
+
+#: ../src/edit.js:95
+msgid "Click to Close"
+msgstr ""
+
+#: ../src/edit.js:96
+msgid "When open, this accordion item title can be clicked again to close it."
+msgstr ""
+
+#: ../src/edit.js:96
+msgid "Once opened, this accordion item cannot be closed by clicking the title."
+msgstr ""
+
+#: ../src/edit.js:101
+msgid "Auto Close"
+msgstr ""
+
+#: ../src/edit.js:102
+msgid "This accordion item will close when opening another item."
+msgstr ""
+
+#: ../src/edit.js:102
+msgid "This accordion item will remain open when opening another item."
+msgstr ""
+
+#: ../src/edit.js:107
+msgid "Scroll to Accordion Item"
+msgstr ""
+
+#: ../src/edit.js:108
+msgid "The page will scroll to the accordion item title when it is opened."
+msgstr ""
+
+#: ../src/edit.js:108
+msgid "The page will not scroll when opening accordion items."
+msgstr ""
+
+#: ../src/edit.js:113
+msgid "Scoll Pixel Offset"
+msgstr ""
+
+#: ../src/edit.js:118
+msgid "A pixel offset for the final scroll position."
+msgstr ""
+
+#: ../src/edit.js:130
+msgid "Accordion item title..."
+msgstr ""
+
+#: ../src/settings.js:14
+msgid "Accordion Item"
+msgstr ""
