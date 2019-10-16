@@ -6,6 +6,7 @@
  * Version: 1.0.4
  * Author: Phil Buchanan
  * Author URI: https://philbuchanan.com
+ * Text Domain: pb
  */
 
 // Make sure to not redeclare the class
@@ -110,7 +111,7 @@ class PB_Accordion_Blocks {
 	public function add_documentation_link($links) {
 		array_push($links, sprintf('<a href="%s">%s</a>',
 			'http://wordpress.org/plugins/accordion-blocks/',
-			_x('Documentation', 'link to documentation on wordpress.org site', 'accordion_blocks')
+			_x('Documentation', 'link to documentation on wordpress.org site', 'pb')
 		));
 
 		return $links;
