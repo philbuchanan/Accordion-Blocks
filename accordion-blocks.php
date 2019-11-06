@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Accordion Blocks
  * Description: Gutenberg blocks for creating responsive accordion drop-downs.
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: Phil Buchanan
  * Author URI: https://philbuchanan.com
  * Text Domain: pb
@@ -94,9 +94,11 @@ class PB_Accordion_Blocks {
 	 * Enqueue the block's assets for the frontend
 	 */
 	public function enqueue_frontend_assets() {
+		$min = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
+
 		wp_enqueue_script(
 			'pb-accordion-blocks-frontend-script',
-			plugins_url('js/accordion-blocks.js', __FILE__),
+			plugins_url("js/accordion-blocks$min.js", __FILE__),
 			array('jquery'),
 			$this->plugin_version,
 			true
