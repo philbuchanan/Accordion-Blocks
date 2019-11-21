@@ -82,7 +82,7 @@ class PB_Accordion_Blocks {
 			$this->get_plugin_version()
 		);
 
-		register_block_type('pb/accordion-blocks', array(
+		register_block_type('pb/accordion-item', array(
 			'editor_script' => 'pb-accordion-blocks-script',
 			'style'         => 'pb-accordion-blocks-style',
 		));
