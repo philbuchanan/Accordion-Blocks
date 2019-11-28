@@ -44,6 +44,9 @@ class PB_Accordion_Blocks {
 			// Add link to documentation on plugin page
 			add_filter("plugin_action_links_$basename", array($this, 'add_documentation_link'));
 		}
+
+		// Add API endpoint to get defaults
+		add_action('rest_api_init', array($this, 'register_rest_routes'));
 	}
 
 
@@ -115,6 +118,113 @@ class PB_Accordion_Blocks {
 		));
 
 		return $links;
+	}
+
+
+
+	/**
+	 * Register rest endpoint to get plugin defaults
+	 */
+	public function register_rest_routes() {
+		register_rest_route('accordion-blocks/v1', '/defaults', array(
+			'methods' => WP_REST_Server::READABLE,
+			'callback' => array($this, 'api_get_defaults'),
+		));
+
+		register_rest_route('accordion-blocks/v1', '/defaults', array(
+			'methods' => WP_REST_Server::EDITABLE,
+			'callback' => array($this, 'api_set_defaults'),
+			'permission_callback' => array($this, 'check_permissions'),
+		));
+	}
+
+
+
+	/**
+	 * Get accordion block default settings
+	 *
+	 * @return object Default accordion block settings object
+	 */
+	public function api_get_defaults() {
+		$defaults = $this->get_defaults();
+
+		/*
+		 * If there are no defaults set yet, set them now
+		 * This will likely only happen when users upgrade from an older version
+		 * of the plugin.
+		 */
+		if (!$defaults) {
+			$defaults = (object) array(
+				'initiallyOpen' => false,
+				'clickToClose'  => true,
+				'autoClose'     => true,
+				'scroll'        => false,
+				'scrollOffset'  => 0,
+			);
+
+			$this->set_defaults($defaults);
+		}
+
+		$response = new WP_REST_Response($defaults);
+		$response->set_status(200);
+
+		return $response;
+	}
+
+
+
+	/**
+	 * Set accordion block default settings
+	 *
+	 * @param data object The date passed from the API
+	 * @return object Default accordion block settings object
+	 */
+	public function api_set_defaults($request) {
+		$old_defaults = $this->get_defaults();
+
+		$new_defaults = json_decode($request->get_body());
+
+		$new_defaults = (object) array(
+			'initiallyOpen' => isset($new_defaults->initiallyOpen) ? $new_defaults->initiallyOpen : $old_defaults->initiallyOpen,
+			'clickToClose'  => isset($new_defaults->clickToClose)  ? $new_defaults->clickToClose  : $old_defaults->clickToClose,
+			'autoClose'     => isset($new_defaults->autoClose)     ? $new_defaults->autoClose     : $old_defaults->autoClose,
+			'scroll'        => isset($new_defaults->scroll)        ? $new_defaults->scroll        : $old_defaults->scroll,
+			'scrollOffset'  => isset($new_defaults->scrollOffset)  ? $new_defaults->scrollOffset  : $old_defaults->scrollOffset,
+		);
+
+		$this->set_defaults($new_defaults);
+
+		$response = new WP_REST_Response($new_defaults);
+		$response->set_status(201);
+
+		return $response;
+	}
+
+
+
+	/**
+	 * Ensure user has permission to set defaults
+	 */
+	public function check_permissions() {
+		return current_user_can('edit_posts');
+	}
+
+
+
+	/**
+	 * Get default settings from `wp_options` table
+	 */
+	private function get_defaults() {
+		return get_option('accordion_blocks_defaults');
+	}
+
+
+
+	/**
+	 * Save default settings in `wp_options` table
+	 */
+	private function set_defaults($settings) {
+		return update_option('accordion_blocks_defaults', $settings);
 	}
 
 }

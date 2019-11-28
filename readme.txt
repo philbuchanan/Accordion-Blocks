@@ -66,6 +66,12 @@ You can use the following CSS classes to customize the look of the accordion.
 
 == Frequently Asked Questions ==
 
+= Can I change all my existing accordion items to the defaults? =
+
+No. It is not possible to change all your accordion item's settings (within the same page or across multiple pages) to the defaults.
+
+Although I would like to offer this feature, based on my research it would require a significant amount of development time that I am unable to devote to a free plugin. If you are a developer and would be interested in helping implement a feature like that, please let me know.
+
 = Why isn't the JavaScript file loading on my site? =
 
 This is most likely caused by a poorly coded theme. This plugin makes use of the `wp_footer()` function to load the JavaScript file and it's dependancy (jQuery). Check your theme to ensure that the `wp_footer()` function is being called right before the closing `</body>` tag in your theme's footer.php file.
@@ -81,7 +87,8 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 
 == Changelog ==
 = 1.1.0 =
-* Fixed Accordions not working if showing multiple posts' content on one page
+* New: An option to set and restore default accordion item settings
+* Fixed: Accordions not working if showing multiple posts' content on one page
 
 = 1.0.6 =
 * Fixed typo in plugin settings
@@ -108,7 +115,7 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 
 == Upgrade Notice ==
 = 1.1.0 =
-Big update for the plugin with lots of fixes and feature additions.
+Medium sized update to the plugin with a few fixes and some feature additions.
 
 = 1.0.6 =
 Fixed typo in plugin settings.
