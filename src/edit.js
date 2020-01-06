@@ -110,7 +110,7 @@ const AccordionItemEdit = ({
 						onChange={ value => setAttributes({scroll: value}) }
 					/>
 					<RangeControl
-						label={ __('Scoll Pixel Offset', 'pb') }
+						label={ __('Scroll Pixel Offset', 'pb') }
 						value={ scrollOffset }
 						onChange={ value => setAttributes({scrollOffset: value ? value : 0}) }
 						min={ 0 }
