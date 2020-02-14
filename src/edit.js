@@ -8,11 +8,6 @@ const {
 } = wp.element;
 
 const {
-	compose,
-	withInstanceId,
-} = wp.compose;
-
-const {
 	BlockControls,
 	InspectorControls,
 	RichText,
@@ -39,7 +34,6 @@ const AccordionItemEdit = ({
 	className,
 	attributes,
 	setAttributes,
-	instanceId,
 }) => {
 	const {
 		title,
@@ -52,9 +46,15 @@ const AccordionItemEdit = ({
 		uuid,
 	} = attributes;
 
-	setAttributes({
-		uuid: instanceId,
-	});
+	/**
+	 * Set the uuid attribute to an ID that is very likely to be unique across
+	 * multiple post. This fixes the issue outlined in #31.
+	 */
+	if (!uuid) {
+		setAttributes({
+			uuid: Math.floor(Math.random() * (100000 - 1 + 1) + 1),
+		});
+	}
 
 	var titleClasses = [
 		'c-accordion__title',
@@ -139,6 +139,4 @@ const AccordionItemEdit = ({
 	);
 };
 
-export default compose([
-	withInstanceId,
-])(AccordionItemEdit);
+export default AccordionItemEdit;
