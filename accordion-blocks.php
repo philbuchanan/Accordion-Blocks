@@ -69,9 +69,7 @@ class PB_Accordion_Blocks {
 		wp_register_script(
 			'pb-accordion-blocks-script',
 			plugins_url('build/index.js', __FILE__),
-			array_merge($asset_file['dependencies'], array(
-				'wp-block-editor',
-			)),
+			$asset_file['dependencies'],
 			$asset_file['version']
 		);
 
