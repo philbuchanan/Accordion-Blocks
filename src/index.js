@@ -1,27 +1,15 @@
 /**
  * WordPress dependencies
  */
-const {
-	registerBlockType,
-} = wp.blocks;
-
-const {
-	InnerBlocks,
-	RichText,
-} = wp.blockEditor;
-
-
+import { registerBlockType } from '@wordpress/blocks';
+import { InnerBlocks, RichText } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
 import settings from './settings';
-
 import transforms from './transforms';
-
 import edit from './edit';
-
-
 
 registerBlockType('pb/accordion-item', {
 	...settings,

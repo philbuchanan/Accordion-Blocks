@@ -1,34 +1,25 @@
 /**
  * WordPress dependencies
  */
-const { __ } = wp.i18n;
-
-const {
-	Fragment,
-} = wp.element;
-
-const {
+import { __ } from '@wordpress/i18n';
+import { Fragment } from '@wordpress/element';
+import {
 	BlockControls,
 	InspectorControls,
 	RichText,
 	InnerBlocks,
-} = wp.blockEditor;
-
-const {
+} from '@wordpress/block-editor';
+import {
 	PanelBody,
 	Toolbar,
 	ToggleControl,
 	RangeControl,
-} = wp.components;
-
-
+} from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import getHTMLTagIcon from './get-html-tag-icon';
-
-
 
 const AccordionItemEdit = ({
 	className,

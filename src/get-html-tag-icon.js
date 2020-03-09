@@ -1,12 +1,7 @@
 /**
  * Wordpress dependencies
  */
-const {
-	SVG,
-	Path,
-} = wp.components;
-
-
+import { SVG, Path } from '@wordpress/components';
 
 export default function getHTMLTagIcon(tag) {
 	var icon;
