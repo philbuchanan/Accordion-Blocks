@@ -39,7 +39,7 @@
 		 * default.
 		 */
 		(function initialSetup() {
-			settings.scrollOffset = Math.floor(parseInt(settings.scrollOffset)) | 0;
+			settings.scrollOffset = Math.floor(parseInt(settings.scrollOffset)) || 0;
 
 			// If this item has `initally-open prop` set to true, open it
 			if (settings.initiallyOpen) {
