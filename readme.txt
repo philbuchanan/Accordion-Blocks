@@ -9,11 +9,11 @@ Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Gutenberg blocks for creating responsive accordion drop-downs.
+Gutenberg block for creating responsive accordion drop-downs.
 
 == Description ==
 
-Accordion Blocks is a simple plugin that adds Gutenberg blocks for adding accordion drop-downs to your pages.
+Accordion Blocks is a simple plugin that adds a Gutenberg block for adding accordion drop-downs to your pages.
 
 The accordions should blend seamlessly with your theme. However, you may want to add custom styles to your theme.
 
@@ -73,6 +73,11 @@ This is most likely caused by a poorly coded theme. This plugin makes use of the
 = Issues/Suggestions =
 
 For bug reports or feature requests or if you'd like to contribute to the plugin you can check everything out on [Github](https://github.com/philbuchanan/Accordion-Blocks/).
+
+== Screenshots ==
+
+1. Accordion block settings sidebar
+2. Accordion block in the editor
 
 == Changelog ==
 = 1.1.0 =
