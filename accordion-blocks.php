@@ -38,7 +38,7 @@ class PB_Accordion_Blocks {
 		add_action('init', array($this, 'register_block'));
 
 		// Register frontend JavaScript
-		add_action('enqueue_block_assets', array($this, 'enqueue_frontend_assets'));
+		add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_assets'));
 
 		if (is_admin()) {
 			// Add link to documentation on plugin page
@@ -80,7 +80,7 @@ class PB_Accordion_Blocks {
 			'pb-accordion-blocks-style',
 			plugins_url('css/accordion-blocks.css', __FILE__),
 			array(),
-			$this->get_plugin_version()
+			$this->plugin_version
 		);
 
 		register_block_type('pb/accordion-item', array(
