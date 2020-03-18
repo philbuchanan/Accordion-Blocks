@@ -5,7 +5,7 @@ Donate Link: https://philbuchanan.com/
 Tags: accordion, accordions, gutenberg, blocks, responsive accordions, accordions plugin, jquery accordions, accordions plugin wordpress, accordions plugin jquery
 Requires at least: 5.0
 Tested up to: 5.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,6 +86,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 2. Accordion block in the editor
 
 == Changelog ==
+= 1.1.1 =
+* Fixed: An issue introduced in version 1.1.0 where, on some sites, accordion content would not smoothly animate open
+
 = 1.1.0 =
 * New: An option to set default accordion item settings that will be applied to all newly created accordions. Individual accordion items can be reset to whatever is set as the defaults.
 * Fixed: Accordions not working if showing multiple posts' content on one page. Unfortunately this will only apply to newly created accordions. Old accordions will need to be replaced to work properly.
@@ -115,6 +118,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.1.1 =
+Fixed a small bug accidentally introduced in version 1.1.0 of the plugin.
+
 = 1.1.0 =
 Medium sized update to the plugin with a few fixes and some feature additions.
 
