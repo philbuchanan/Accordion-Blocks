@@ -29,7 +29,8 @@
 		item.self       = $(this);
 		item.id         = $(this).attr('id');
 		item.controller = $(this).children('.js-accordion-controller');
-		item.content    = $('#' +  item.controller.attr('aria-controls'));
+		item.uuid       = item.controller.attr('id').replace('at-', '');
+		item.content    = $('#ac-' + item.uuid);
 
 
 
@@ -39,7 +40,19 @@
 		 * default.
 		 */
 		(function initialSetup() {
-			settings.scrollOffset = Math.floor(parseInt(settings.scrollOffset)) | 0;
+			/**
+			 * Set up some defaults for this controller
+			 * These cannot be set in the blocks `save` function becuase
+			 * WordPress strips `tabindex` and `aria-controls` attributes from
+			 * saved post content. See `_wp_add_global_attributes` function in
+			 * wp-includes/kses.php for list of allowed attributes.
+			 */
+			item.controller.attr({
+				'tabindex': 0,
+				'aria-controls': 'ac-' + item.uuid,
+			});
+
+			settings.scrollOffset = Math.floor(parseInt(settings.scrollOffset, 10)) || 0;
 
 			// If this item has `initally-open prop` set to true, open it
 			if (settings.initiallyOpen) {
@@ -102,6 +115,8 @@
 		function openItem() {
 			// Clear/stop any previous animations before revealing content
 			item.content.clearQueue().stop().slideDown(duration, function() {
+				setOpenItemAttributes();
+
 				// Scroll page to the title
 				if (settings.scroll) {
 					// Pause scrolling until other items have closed
@@ -112,8 +127,6 @@
 					}, duration);
 				}
 			});
-
-			setOpenItemAttributes();
 
 			$(document).trigger('openAccordionItem', item);
 		}
@@ -126,10 +139,8 @@
 		 */
 		function setOpenItemAttributes() {
 			item.self.addClass('is-open is-read');
-			item.controller.attr({
-				'aria-expanded': 'true',
-			});
-			item.content.removeAttr('aria-hidden');
+			item.controller.attr('aria-expanded', true);
+			item.content.removeAttr('hidden');
 		}
 
 
@@ -140,9 +151,9 @@
 		 */
 		function closeItem() {
 			// Close the item
-			item.content.slideUp(duration);
-
-			setCloseItemAttributes();
+			item.content.slideUp(duration, function() {
+				setCloseItemAttributes();
+			});
 		}
 
 
@@ -153,12 +164,8 @@
 		 */
 		function setCloseItemAttributes() {
 			item.self.removeClass('is-open');
-			item.controller.attr({
-				'aria-expanded': 'false',
-			});
-			item.content.attr({
-				'aria-hidden': 'true',
-			});
+			item.controller.attr('aria-expanded', false);
+			item.content.attr('hidden', true);
 		}
 
 

@@ -4,16 +4,16 @@ Author URI: https://philbuchanan.com/
 Donate Link: https://philbuchanan.com/
 Tags: accordion, accordions, gutenberg, blocks, responsive accordions, accordions plugin, jquery accordions, accordions plugin wordpress, accordions plugin jquery
 Requires at least: 5.0
-Tested up to: 5.3
-Stable tag: 1.0.6
+Tested up to: 5.4
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Gutenberg blocks for creating responsive accordion drop-downs.
+Gutenberg block for creating responsive accordion drop-downs.
 
 == Description ==
 
-Accordion Blocks is a simple plugin that adds Gutenberg blocks for adding accordion drop-downs to your pages.
+Accordion Blocks is a simple plugin that adds a Gutenberg block for adding accordion drop-downs to your pages.
 
 The accordions should blend seamlessly with your theme. However, you may want to add custom styles to your theme.
 
@@ -66,6 +66,12 @@ You can use the following CSS classes to customize the look of the accordion.
 
 == Frequently Asked Questions ==
 
+= Can I change all my existing accordion items to the defaults? =
+
+No. It is not possible to change all your accordion item's settings (within the same page or across multiple pages) to the defaults.
+
+Although I would like to offer this feature, based on my research it would require a significant amount of development time that I am unable to devote to a free plugin. If you are a developer and would be interested in helping implement a feature like that, please let me know.
+
 = Why isn't the JavaScript file loading on my site? =
 
 This is most likely caused by a poorly coded theme. This plugin makes use of the `wp_footer()` function to load the JavaScript file and it's dependancy (jQuery). Check your theme to ensure that the `wp_footer()` function is being called right before the closing `</body>` tag in your theme's footer.php file.
@@ -74,7 +80,17 @@ This is most likely caused by a poorly coded theme. This plugin makes use of the
 
 For bug reports or feature requests or if you'd like to contribute to the plugin you can check everything out on [Github](https://github.com/philbuchanan/Accordion-Blocks/).
 
+== Screenshots ==
+
+1. Accordion block settings sidebar
+2. Accordion block in the editor
+
 == Changelog ==
+= 1.1.0 =
+* New: An option to set default accordion item settings that will be applied to all newly created accordions. Individual accordion items can be reset to whatever is set as the defaults.
+* Fixed: Accordions not working if showing multiple posts' content on one page. Unfortunately this will only apply to newly created accordions. Old accordions will need to be replaced to work properly.
+* Fixed: Users without the `unfiltered_html` permission (i.e. users with Author or lower user role) would get an "invalid content" error when viewing an accordion added by a user with the `unfiltered_html` permission (and vise-versa).
+
 = 1.0.6 =
 * Fixed typo in plugin settings
 
@@ -99,6 +115,11 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.1.0 =
+Medium sized update to the plugin with a few fixes and some feature additions.
+
+NOTE: If you have dequeued the default plugin stylesheet you may see all of your accordions animate from open to closed for a split second when the page loads. You can resolve this by adding `[data-initially-open="false"] .c-accordion__content { display: none }` to your theme stylesheet.
+
 = 1.0.6 =
 Fixed typo in plugin settings.
 

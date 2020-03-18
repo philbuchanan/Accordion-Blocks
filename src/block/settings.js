@@ -1,14 +1,8 @@
 /**
  * WordPress dependencies
  */
-const { __ } = wp.i18n;
-
-const {
-	SVG,
-	Path,
-} = wp.components;
-
-
+import { __ } from '@wordpress/i18n';
+import { SVG, Path } from '@wordpress/components';
 
 export default {
 	title: __('Accordion Item', 'pb'),
