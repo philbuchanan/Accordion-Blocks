@@ -79,6 +79,12 @@ $color-open-icon: #777;
 	}
 }
 
+[data-initially-open="false"] {
+	.c-accordion__content {
+		display: none;
+	}
+}
+
 // Make all the content visible when printing the page.
 @media print {
 	.c-accordion__content {

@@ -87,8 +87,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 
 == Changelog ==
 = 1.1.0 =
-* New: An option to set and restore default accordion item settings
-* Fixed: Accordions not working if showing multiple posts' content on one page
+* New: An option to set default accordion item settings that will be applied to all newly created accordions. Individual accordion items can be reset to whatever is set as the defaults.
+* Fixed: Accordions not working if showing multiple posts' content on one page. Unfortunately this will only apply to newly created accordions. Old accordions will need to be replaced to work properly.
+* Fixed: Users without the `unfiltered_html` permission (i.e. users with Author or lower user role) would get an "invalid content" error when viewing an accordion added by a user with the `unfiltered_html` permission (and vise-versa).
 
 = 1.0.6 =
 * Fixed typo in plugin settings
@@ -116,6 +117,8 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 == Upgrade Notice ==
 = 1.1.0 =
 Medium sized update to the plugin with a few fixes and some feature additions.
+
+NOTE: If you have dequeued the default plugin stylesheet you may see all of your accordions animate from open to closed for a split second when the page loads. You can resolve this by adding `[data-initially-open="false"] .c-accordion__content { display: none }` to your theme stylesheet.
 
 = 1.0.6 =
 Fixed typo in plugin settings.

@@ -10,6 +10,7 @@ import { InnerBlocks, RichText } from '@wordpress/block-editor';
 import settings from './settings';
 import transforms from './transforms';
 import edit from './edit';
+import deprecated from './deprecated';
 
 registerBlockType('pb/accordion-item', {
 	...settings,
@@ -68,19 +69,18 @@ registerBlockType('pb/accordion-item', {
 					id={ 'at-' + uuid }
 					className={ titleClasses.join(' ') }
 					tagName={ titleTag }
-					tabIndex={ 0 }
 					role="button"
-					aria-controls={ 'ac-' + uuid }
 					value={ title }
 				/>
 				<div
 					id={ 'ac-' + uuid }
 					className="c-accordion__content"
-					style={ contentStyles }
 				>
 					<InnerBlocks.Content />
 				</div>
 			</div>
 		);
 	},
+
+	deprecated,
 });
