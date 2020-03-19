@@ -113,10 +113,10 @@
 		 * Also handles accessibility attribute settings.
 		 */
 		function openItem() {
+			setOpenItemAttributes();
+
 			// Clear/stop any previous animations before revealing content
 			item.content.clearQueue().stop().slideDown(duration, function() {
-				setOpenItemAttributes();
-
 				// Scroll page to the title
 				if (settings.scroll) {
 					// Pause scrolling until other items have closed
