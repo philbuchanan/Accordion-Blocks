@@ -87,7 +87,8 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 
 == Changelog ==
 = 1.1.1 =
-* Fixed: An issue introduced in version 1.1.0 where, on some sites, accordion content would not smoothly animate open
+* Fixed: An issue where, on some sites, accordion content would not smoothly animate open, instead just appearing instantly after a short delay
+* Fixed: Duplicated accordion items now have unique IDs which should resolve the issue where clicking on the duplicate title opens the original block
 
 = 1.1.0 =
 * New: An option to set default accordion item settings that will be applied to all newly created accordions. Individual accordion items can be reset to whatever is set as the defaults.
@@ -119,7 +120,7 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 
 == Upgrade Notice ==
 = 1.1.1 =
-Fixed a small bug accidentally introduced in version 1.1.0 of the plugin.
+Fixed a couple small bugs accidentally introduced in version 1.1.0 of the plugin.
 
 = 1.1.0 =
 Medium sized update to the plugin with a few fixes and some feature additions.

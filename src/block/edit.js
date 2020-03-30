@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Fragment } from '@wordpress/element';
+import { Fragment, useEffect } from '@wordpress/element';
 import { useSelect, dispatch } from '@wordpress/data';
 import {
 	BlockControls,
@@ -23,6 +23,8 @@ import {
  */
 import getHTMLTagIcon from './get-html-tag-icon';
 import classnames from '../utils/classnames';
+
+const uniqueIds = [];
 
 const AccordionItemEdit = ({
 	className,
@@ -71,20 +73,39 @@ const AccordionItemEdit = ({
 		scroll === defaults.scroll &&
 		scrollOffset === defaults.scrollOffset;
 
-	/**
-	 * Set the uuid attribute to an ID that is very likely to be unique across
-	 * multiple post. This fixes the issue outlined in #31.
-	 */
-	if (!uuid) {
-		setAttributes({
-			uuid: Math.floor(Math.random() * (100000 - 1 + 1) + 1),
-			initiallyOpen: defaults.initiallyOpen,
-			clickToClose: defaults.clickToClose,
-			autoClose: defaults.autoClose,
-			scroll: defaults.scroll,
-			scrollOffset: defaults.scrollOffset,
-		});
-	}
+	useEffect(() => {
+		let id = uuid;
+
+		/**
+		 * If there is no uuid set, this is a new accordion. That means the default
+		 * settings should apply thos this block.
+		 */
+		if (!id) {
+			setAttributes({
+				initiallyOpen: defaults.initiallyOpen,
+				clickToClose: defaults.clickToClose,
+				autoClose: defaults.autoClose,
+				scroll: defaults.scroll,
+				scrollOffset: defaults.scrollOffset,
+			});
+		}
+
+		/**
+		 * Set the uuid attribute to something that is very likely to be unique
+		 * across multiple posts. This fixes the issues outlined in #31 and #47.
+		 */
+		if (!id || uniqueIds.includes(id)) {
+			id = Math.floor(Math.random() * (100000 - 1 + 1) + 1);
+
+			setAttributes({uuid: id});
+		}
+
+		uniqueIds.push(id);
+
+		return () => {
+			uniqueIds.splice(uniqueIds.indexOf(id), 1);
+		}
+	}, []);
 
 	return (
 		<Fragment>
