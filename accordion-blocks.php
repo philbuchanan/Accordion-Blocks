@@ -3,10 +3,11 @@
 /**
  * Plugin Name: Accordion Blocks
  * Description: Gutenberg blocks for creating responsive accordion drop-downs.
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: Phil Buchanan
  * Author URI: https://philbuchanan.com
  * Text Domain: pb
+ * Domain Path: /languages
  */
 
 // Make sure to not redeclare the class
