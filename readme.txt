@@ -87,7 +87,8 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 
 == Changelog ==
 = 1.1.2 =
-* Fixed: Updated translations strings
+* Fixed: Accordion titles once again support bold and italic formats
+* Fixed: Translation should now be possible via WordPress translation site
 
 = 1.1.1 =
 * Fixed: An issue where, on some sites, accordion content would not smoothly animate open, instead just appearing instantly after a short delay
@@ -123,7 +124,7 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 
 == Upgrade Notice ==
 = 1.1.2 =
-Updated translations strings.
+Restored bold and italic formatting of accordion titles and fixed translation strings.
 
 = 1.1.1 =
 Fixed a couple small bugs accidentally introduced in version 1.1.0 of the plugin.

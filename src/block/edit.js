@@ -119,7 +119,7 @@ const AccordionItemEdit = ({
 							onClick: () => setAttributes({'titleTag': tag}),
 						}))
 					}
-			/>
+				/>
 			</BlockControls>
 			<InspectorControls>
 				<PanelBody title={ __('Accordion Item Settings', 'accordion-blocks') }>
@@ -207,8 +207,8 @@ const AccordionItemEdit = ({
 					}) }
 					tagName={ titleTag }
 					allowedFormats={ [
-						'bold',
-						'italic',
+						'core/bold',
+						'core/italic',
 					] }
 					placeholder={ __('Accordion item title…', 'accordion-blocks') }
 					value={ title }
