@@ -5,7 +5,7 @@ import { __ } from '@wordpress/i18n';
 import { SVG, Path } from '@wordpress/components';
 
 export default {
-	title: __('Accordion Item', 'pb'),
+	title: __('Accordion Item', 'accordion-blocks'),
 
 	icon: <SVG viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
 			<Path d="M16.93,8.93a1,1,0,0,1-.7-.29L12,4.41,7.9,8.51A1,1,0,0,1,6.49,7.1L12,1.59l5.64,5.64a1,1,0,0,1,0,1.41A1,1,0,0,1,16.93,8.93Z" />

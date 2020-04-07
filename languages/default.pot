@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Accordion Blocks\n"
-"POT-Creation-Date: 2020-04-06 18:06-0400\n"
+"POT-Creation-Date: 2020-04-07 11:49-0400\n"
 "PO-Revision-Date: 2020-04-06 18:05-0400\n"
 "Last-Translator: Phil Buchanan <info@philbuchanan.com>\n"
 "Language-Team: Phil Buchanan\n"
@@ -94,7 +94,7 @@ msgid "Reset These Settings to Defaults"
 msgstr ""
 
 #: ../src/block/edit.js:201
-msgid "Accordion item title..."
+msgid "Accordion item title…"
 msgstr ""
 
 #: ../src/block/settings.js:8
