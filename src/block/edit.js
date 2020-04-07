@@ -77,8 +77,8 @@ const AccordionItemEdit = ({
 		let id = uuid;
 
 		/**
-		 * If there is no uuid set, this is a new accordion. That means the default
-		 * settings should apply thos this block.
+		 * If there is no uuid set, this is a new accordion. That means the
+		 * default settings should apply thos this block.
 		 */
 		if (!id) {
 			setAttributes({
@@ -122,28 +122,40 @@ const AccordionItemEdit = ({
 			/>
 			</BlockControls>
 			<InspectorControls>
-				<PanelBody title={ __('Accordion Item Settings', 'pb') }>
+				<PanelBody title={ __('Accordion Item Settings', 'accordion-blocks') }>
 					<ToggleControl
-						label={ __('Open By Default', 'pb') }
-						help={ initiallyOpen ? __('This accordion item will be open when the page loads.', 'pb') : __('This accordion item will be closed when the page loads.', 'pb') }
+						label={ __('Open By Default', 'accordion-blocks') }
+						help={ initiallyOpen ?
+							__('This accordion item will be open when the page loads.', 'accordion-blocks') :
+							__('This accordion item will be closed when the page loads.', 'accordion-blocks')
+						}
 						checked={ initiallyOpen }
 						onChange={ value => setAttributes({initiallyOpen: value}) }
 					/>
 					<ToggleControl
-						label={ __('Click to Close', 'pb') }
-						help={ clickToClose ? __('When open, this accordion item title can be clicked again to close it.', 'pb') : __('Once opened, this accordion item cannot be closed by clicking the title.', 'pb') }
+						label={ __('Click to Close', 'accordion-blocks') }
+						help={ clickToClose ?
+							__('When open, this accordion item title can be clicked again to close it.', 'accordion-blocks') :
+							__('Once opened, this accordion item cannot be closed by clicking the title.', 'accordion-blocks')
+						}
 						checked={ clickToClose }
 						onChange={ value => setAttributes({clickToClose: value}) }
 					/>
 					<ToggleControl
-						label={ __('Auto Close', 'pb') }
-						help={ autoClose ? __('This accordion item will close when opening another item.', 'pb') : __('This accordion item will remain open when opening another item.', 'pb') }
+						label={ __('Auto Close', 'accordion-blocks') }
+						help={ autoClose ?
+							__('This accordion item will close when opening another item.', 'accordion-blocks') :
+							__('This accordion item will remain open when opening another item.', 'accordion-blocks')
+						}
 						checked={ autoClose }
 						onChange={ value => setAttributes({autoClose: value}) }
 					/>
 					<ToggleControl
-						label={ __('Scroll to Accordion Item', 'pb') }
-						help={ scroll ? __('The page will scroll to the accordion item title when it is opened.', 'pb') : __('The page will not scroll when opening accordion items.', 'pb') }
+						label={ __('Scroll to Accordion Item', 'accordion-blocks') }
+						help={ scroll ?
+							__('The page will scroll to the accordion item title when it is opened.', 'accordion-blocks') :
+							__('The page will not scroll when opening accordion items.', 'accordion-blocks')
+						}
 						checked={ scroll }
 						onChange={ value => setAttributes({
 							scroll: value,
@@ -152,12 +164,12 @@ const AccordionItemEdit = ({
 					/>
 					{ !!scroll && (
 						<RangeControl
-							label={ __('Scroll Pixel Offset', 'pb') }
+							label={ __('Scroll Pixel Offset', 'accordion-blocks') }
 							value={ scrollOffset }
 							onChange={ value => setAttributes({scrollOffset: value ? value : 0}) }
 							min={ 0 }
 							max={ 1000 }
-							help={ __('A pixel offset for the final scroll position.', 'pb') }
+							help={ __('A pixel offset for the final scroll position.', 'accordion-blocks') }
 						/>
 					) }
 					{ !areSettingsDefaults && (
@@ -167,13 +179,13 @@ const AccordionItemEdit = ({
 								isLink={ true }
 								onClick={ saveDefaults }
 							>
-								{ __('Make These Settings the Defaults', 'pb') }
+								{ __('Make These Settings the Defaults', 'accordion-blocks') }
 							</Button>
 							<p style={ {
 								fontStyle: 'italic',
 								marginTop: '7px',
 							} }>
-								{ __('Default settings only apply when creating new accordion items.', 'pb') }
+								{ __('Default settings only apply when creating new accordion items.', 'accordion-blocks') }
 							</p>
 							<p>
 								<Button
@@ -181,7 +193,7 @@ const AccordionItemEdit = ({
 									isDestructive={ true }
 									onClick={ restoreDefaults }
 								>
-									{ __('Reset These Settings to Defaults', 'pb') }
+									{ __('Reset These Settings to Defaults', 'accordion-blocks') }
 								</Button>
 							</p>
 						</Fragment>
@@ -198,7 +210,7 @@ const AccordionItemEdit = ({
 						'bold',
 						'italic',
 					] }
-					placeholder={ __('Accordion item title...', 'pb') }
+					placeholder={ __('Accordion item title…', 'accordion-blocks') }
 					value={ title }
 					onChange={ value => setAttributes({title: value}) }
 				/>
