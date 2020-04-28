@@ -5,7 +5,7 @@ Donate Link: https://philbuchanan.com/
 Tags: accordion, accordions, gutenberg, blocks, responsive
 Requires at least: 5.0
 Tested up to: 5.4
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,6 +86,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 2. Accordion block in the editor
 
 == Changelog ==
+= 1.1.3 =
+* Fixed: When typing backspace on a button title, it would delete the entire accordion item instead of backspacing a character
+
 = 1.1.2 =
 * Fixed: Accordion titles once again support bold and italic formats
 * Fixed: Translation should now be possible via WordPress translation site
@@ -123,6 +126,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.1.3 =
+Fixed an issue where typing backspace on a button title type would delete the entire accordion item instead of backspacing a character.
+
 = 1.1.2 =
 Restored bold and italic formatting of accordion titles and fixed translation strings.
 
