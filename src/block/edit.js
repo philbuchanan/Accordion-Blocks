@@ -205,7 +205,7 @@ const AccordionItemEdit = ({
 					className={ classnames('c-accordion__title', {
 						'c-accordion__title--button': titleTag === 'button',
 					}) }
-					tagName={ titleTag }
+					tagName={ titleTag === 'button' ? 'div' : titleTag }
 					allowedFormats={ [
 						'core/bold',
 						'core/italic',
