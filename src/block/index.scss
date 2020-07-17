@@ -10,7 +10,7 @@ $color-open-icon: #777;
 // -----------------------------------------------------------------------------
 
 // Force all content open if there is no JS.
-.no-js {
+.c-accordion__item.no-js {
 	.c-accordion__content {
 		display: block !important;
 	}
