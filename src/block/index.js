@@ -7,6 +7,7 @@ import { InnerBlocks, RichText } from '@wordpress/block-editor';
 /**
  * Internal dependencies
  */
+import './index.scss';
 import settings from './settings';
 import transforms from './transforms';
 import edit from './edit';
