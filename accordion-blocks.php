@@ -116,6 +116,11 @@ class PB_Accordion_Blocks {
 			_x('Documentation', 'link to documentation on wordpress.org site', 'accordion-blocks')
 		));
 
+		array_push($links, sprintf('<a href="%s">%s</a>',
+			'https://philbuchanan.com/donate/',
+			__('Donate', 'accordion-blocks')
+		));
+
 		return $links;
 	}
 
