@@ -5,7 +5,7 @@ Donate Link: https://philbuchanan.com/donate/
 Tags: accordion, accordions, gutenberg, blocks, responsive
 Requires at least: 5.0
 Tested up to: 5.5
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 2. Accordion block in the editor
 
 == Changelog ==
+= 1.1.5 =
+* Fixed: Resolved issue with PHP notice for not setting permission_callback in REST API.
+
 = 1.1.4 =
 * Added: Support for WordPress 5.5
 * Fixed: no-js styles are now specific to the accordion item block
@@ -131,6 +134,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.1.5 =
+Fixed PHP notice for API.
+
 = 1.1.4 =
 Added support for WordPress 5.5 and made no-js styles specific to the accordion item block.
 
