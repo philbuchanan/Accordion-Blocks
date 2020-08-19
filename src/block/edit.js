@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Fragment, useEffect } from '@wordpress/element';
-import { useSelect, dispatch } from '@wordpress/data';
+import { dispatch } from '@wordpress/data';
 import {
 	BlockControls,
 	InspectorControls,
@@ -17,6 +17,7 @@ import {
 	RangeControl,
 	Button,
 } from '@wordpress/components';
+import { useEntityProp } from '@wordpress/core-data';
 
 /**
  * Internal dependencies
@@ -24,7 +25,7 @@ import {
 import getHTMLTagIcon from './get-html-tag-icon';
 import classnames from '../utils/classnames';
 
-const uniqueIds = [];
+let uniqueIds = [];
 
 const AccordionItemEdit = ({
 	className,
@@ -42,18 +43,24 @@ const AccordionItemEdit = ({
 		uuid,
 	} = attributes;
 
-	const defaults = useSelect((select) => {
-		return select('accordion-blocks').getDefaultSettings();
-	});
+	const [defaults, setDefaults] = useEntityProp('root', 'site', 'accordion_blocks_defaults');
 
 	const saveDefaults = () => {
-		dispatch('accordion-blocks').saveDefaultSettings({
+		setDefaults({
 			initiallyOpen: initiallyOpen,
 			clickToClose: clickToClose,
 			autoClose: autoClose,
 			scroll: scroll,
 			scrollOffset: scrollOffset,
 		});
+
+		/**
+		 * Calling `setDefaults()` only sets the entity prop, but doesn't
+		 * actually save it to the database. Currently saving to the database
+		 * must be done using by explicitly using the `saveEditedEntityRecord`
+		 * action.
+		 */
+		wp.data.dispatch('core').saveEditedEntityRecord('root', 'site');
 	};
 
 	const restoreDefaults = () => {
@@ -67,6 +74,7 @@ const AccordionItemEdit = ({
 	};
 
 	const areSettingsDefaults =
+		!(defaults === undefined || defaults === null) &&
 		initiallyOpen === defaults.initiallyOpen &&
 		clickToClose === defaults.clickToClose &&
 		autoClose === defaults.autoClose &&
@@ -78,7 +86,7 @@ const AccordionItemEdit = ({
 
 		/**
 		 * If there is no uuid set, this is a new accordion. That means the
-		 * default settings should apply thos this block.
+		 * default settings should apply to this block.
 		 */
 		if (!id) {
 			setAttributes({
@@ -166,7 +174,7 @@ const AccordionItemEdit = ({
 						<RangeControl
 							label={ __('Scroll Pixel Offset', 'accordion-blocks') }
 							value={ scrollOffset }
-							onChange={ value => setAttributes({scrollOffset: value ? value : 0}) }
+							onChange={ value => setAttributes({scrollOffset: parseInt(value, 10) ? parseInt(value, 10) : 0}) }
 							min={ 0 }
 							max={ 1000 }
 							help={ __('A pixel offset for the final scroll position.', 'accordion-blocks') }
@@ -175,6 +183,11 @@ const AccordionItemEdit = ({
 					{ !areSettingsDefaults && (
 						<Fragment>
 							<hr/>
+							{ (defaults === undefined || defaults === null) && (
+								<p>
+									{ __('You have no default settings set yet.', 'pb') }
+								</p>
+							) }
 							<Button
 								isLink={ true }
 								onClick={ saveDefaults }
@@ -187,15 +200,17 @@ const AccordionItemEdit = ({
 							} }>
 								{ __('Default settings only apply when creating new accordion items.', 'accordion-blocks') }
 							</p>
-							<p>
-								<Button
-									isLink={ true }
-									isDestructive={ true }
-									onClick={ restoreDefaults }
-								>
-									{ __('Reset These Settings to Defaults', 'accordion-blocks') }
-								</Button>
-							</p>
+							{ !(defaults === undefined || defaults === null) && (
+								<p>
+									<Button
+										isLink={ true }
+										isDestructive={ true }
+										onClick={ restoreDefaults }
+									>
+										{ __('Reset These Settings to Defaults', 'accordion-blocks') }
+									</Button>
+								</p>
+							) }
 						</Fragment>
 					) }
 				</PanelBody>
