@@ -2,7 +2,7 @@
 Contributors: philbuchanan
 Author URI: https://philbuchanan.com/
 Donate Link: https://philbuchanan.com/donate/
-Tags: accordion, accordions, gutenberg, blocks, responsive
+Tags: accordion, accordions, gutenberg, block, responsive
 Requires at least: 5.0
 Tested up to: 5.5
 Stable tag: 1.1.5
