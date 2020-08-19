@@ -17,14 +17,15 @@ import {
 	RangeControl,
 	Button,
 } from '@wordpress/components';
+import { useEntityProp } from '@wordpress/core-data';
 
 /**
  * Internal dependencies
  */
-import getHTMLTagIcon from './get-html-tag-icon';
+import HtmlTagIcon from './html-tag-icon';
 import classnames from '../utils/classnames';
 
-const uniqueIds = [];
+let uniqueIds = [];
 
 const AccordionItemEdit = ({
 	className,
@@ -49,18 +50,23 @@ const AccordionItemEdit = ({
 		return !!parentBlocks.length;
 	});
 
-	const defaults = useSelect((select) => {
-		return select('accordion-blocks').getDefaultSettings();
-	});
+	const [defaults, setDefaults] = useEntityProp('root', 'site', 'accordion_blocks_defaults');
 
 	const saveDefaults = () => {
-		dispatch('accordion-blocks').saveDefaultSettings({
+		setDefaults({
 			initiallyOpen: initiallyOpen,
 			clickToClose: clickToClose,
 			autoClose: autoClose,
 			scroll: scroll,
 			scrollOffset: scrollOffset,
 		});
+
+		/**
+		 * Calling `setDefaults()` only sets the entity prop, but doesn't
+		 * actually save it to the database. Currently saving to the database
+		 * must be done explicitly using the `saveEditedEntityRecord` action.
+		 */
+		dispatch('core').saveEditedEntityRecord('root', 'site');
 	};
 
 	const restoreDefaults = () => {
@@ -74,6 +80,7 @@ const AccordionItemEdit = ({
 	};
 
 	const areSettingsDefaults =
+		!(defaults === undefined || defaults === null) &&
 		initiallyOpen === defaults.initiallyOpen &&
 		clickToClose === defaults.clickToClose &&
 		autoClose === defaults.autoClose &&
@@ -84,8 +91,20 @@ const AccordionItemEdit = ({
 		let id = uuid;
 
 		/**
+		 * This check needs to be done before checking for an existing uuid or
+		 * setting a new uuid since we use the uuid as an indicator of whether
+		 * this is a new accordion item. If no uuid is set yet, it is assumed
+		 * that this is a new accordion item and therefore the default settings
+		 * should be applied.
+		 */
+		if (!defaults) {
+			// If defaults haven't been received yet, abort early
+			return;
+		}
+
+		/**
 		 * If there is no uuid set, this is a new accordion. That means the
-		 * default settings should apply thos this block.
+		 * default settings should apply to this block.
 		 */
 		if (!id) {
 			setAttributes({
@@ -112,7 +131,7 @@ const AccordionItemEdit = ({
 		return () => {
 			uniqueIds.splice(uniqueIds.indexOf(id), 1);
 		}
-	}, []);
+	}, [defaults]);
 
 	return (
 		<Fragment>
@@ -120,7 +139,7 @@ const AccordionItemEdit = ({
 				<Toolbar
 					controls={
 						['h1', 'h2', 'h3', 'h4', 'button'].map((tag) => ({
-							icon: getHTMLTagIcon(tag),
+							icon: <HtmlTagIcon tag={ tag }/>,
 							title: tag.toUpperCase(),
 							isActive: titleTag === tag,
 							onClick: () => setAttributes({'titleTag': tag}),
@@ -184,7 +203,7 @@ const AccordionItemEdit = ({
 						<RangeControl
 							label={ __('Scroll Pixel Offset', 'accordion-blocks') }
 							value={ scrollOffset }
-							onChange={ value => setAttributes({scrollOffset: value ? value : 0}) }
+							onChange={ value => setAttributes({scrollOffset: parseInt(value, 10) ? parseInt(value, 10) : 0}) }
 							min={ 0 }
 							max={ 1000 }
 							help={ __('A pixel offset for the final scroll position.', 'accordion-blocks') }
@@ -193,6 +212,11 @@ const AccordionItemEdit = ({
 					{ !areSettingsDefaults && (
 						<Fragment>
 							<hr/>
+							{ (defaults === undefined || defaults === null) && (
+								<p>
+									{ __('You have no default settings set yet.', 'pb') }
+								</p>
+							) }
 							<Button
 								isLink={ true }
 								onClick={ saveDefaults }
@@ -205,15 +229,17 @@ const AccordionItemEdit = ({
 							} }>
 								{ __('Default settings only apply when creating new accordion items.', 'accordion-blocks') }
 							</p>
-							<p>
-								<Button
-									isLink={ true }
-									isDestructive={ true }
-									onClick={ restoreDefaults }
-								>
-									{ __('Reset These Settings to Defaults', 'accordion-blocks') }
-								</Button>
-							</p>
+							{ !(defaults === undefined || defaults === null) && (
+								<p>
+									<Button
+										isLink={ true }
+										isDestructive={ true }
+										onClick={ restoreDefaults }
+									>
+										{ __('Reset These Settings to Defaults', 'accordion-blocks') }
+									</Button>
+								</p>
+							) }
 						</Fragment>
 					) }
 				</PanelBody>
