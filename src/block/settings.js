@@ -19,6 +19,19 @@ export default {
 		anchor: true,
 	},
 
+	example: {
+		attributes: {
+			title: __('Accordion item title', 'accordion-blocks'),
+			titleTag: 'h3',
+		},
+		innerBlocks: [{
+			name: 'core/paragraph',
+			attributes: {
+				content: __('Sample accordion item content for previewing styles in the editor.', 'accordion-blocks'),
+			},
+		}],
+	},
+
 	attributes: {
 		title: {
 			type: 'array',
