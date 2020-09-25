@@ -3,9 +3,9 @@ Contributors: philbuchanan
 Author URI: https://philbuchanan.com/
 Donate Link: https://philbuchanan.com/donate/
 Tags: accordion, accordions, gutenberg, blocks, responsive
-Requires at least: 5.0
+Requires at least: 5.4
 Tested up to: 5.5
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,7 @@ The accordions should blend seamlessly with your theme. However, you may want to
 * Scroll page to title when it's clicked open (including setting a scroll offset position).
 * Set the HTML heading tag for the title element (h1–h4, button).
 * Set defaults to be applied to all new accordion items or reset a specific accordion item to the defaults.
+* Supports adding custom block styles using `wp.blocks.registerBlockStyle`.
 
 = Output =
 
@@ -87,6 +88,10 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 2. Accordion block in the editor
 
 == Changelog ==
+= 1.1.6 =
+* Fixed: Use sample content (instead of real content) to preview custom blocks styles in the editor.
+* Fixed: Bumped required version to WordPress 5.4.
+
 = 1.1.5 =
 * Fixed: Resolved issue with PHP notice for not setting permission_callback in REST API.
 
@@ -134,6 +139,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.1.6 =
+* Accordions now use sample content (instead of real content) to preview custom blocks styles in the editor. This should resolved slow performance in the editor if an accordion using custom block styles and has a lot of content.
+
 = 1.1.5 =
 Fixed PHP notice for API.
 
