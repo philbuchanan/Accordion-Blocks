@@ -39,6 +39,9 @@ class PB_Accordion_Blocks {
 		// Register frontend JavaScript
 		add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_assets'));
 
+		// Tell WordPress which JavaScript files contain translations
+		add_action('init', array($this, 'set_script_translations'));
+
 		if (is_admin()) {
 			// Add link to documentation on plugin page
 			add_filter("plugin_action_links_$basename", array($this, 'add_documentation_link'));
@@ -103,6 +106,15 @@ class PB_Accordion_Blocks {
 			$this->plugin_version,
 			true
 		);
+	}
+
+
+
+	/**
+	 * Tell WordPress which JavaScript files contain translations
+	 */
+	function set_script_translations() {
+		wp_set_script_translations('pb-accordion-blocks-script', 'accordion-blocks');
 	}
 
 
