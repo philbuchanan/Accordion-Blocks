@@ -30,6 +30,7 @@ const AccordionItemEdit = ({
 	className,
 	attributes,
 	setAttributes,
+	clientId,
 }) => {
 	const {
 		title,
@@ -41,6 +42,12 @@ const AccordionItemEdit = ({
 		scrollOffset,
 		uuid,
 	} = attributes;
+
+	const isNestedAccordion = useSelect((select) => {
+		const parentBlocks = select('core/block-editor').getBlockParentsByBlockName(clientId, 'pb/accordion-item');
+
+		return !!parentBlocks.length;
+	});
 
 	const defaults = useSelect((select) => {
 		return select('accordion-blocks').getDefaultSettings();
@@ -122,6 +129,17 @@ const AccordionItemEdit = ({
 				/>
 			</BlockControls>
 			<InspectorControls>
+				{ isNestedAccordion && (
+					<div
+						className="components-notice is-warning"
+						style={ {
+							margin: '0',
+							borderTop: '1px solid #f0f0f0',
+						} }
+					>
+						{ __('This accordion item is nested inside another accordion item. It may not function as expected.', 'accordion-blocks') }
+					</div>
+				) }
 				<PanelBody title={ __('Accordion Item Settings', 'accordion-blocks') }>
 					<ToggleControl
 						label={ __('Open By Default', 'accordion-blocks') }
