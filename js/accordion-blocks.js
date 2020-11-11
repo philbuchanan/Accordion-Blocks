@@ -31,6 +31,7 @@
 		item.controller = $(this).children('.js-accordion-controller');
 		item.uuid       = item.controller.attr('id').replace('at-', '');
 		item.content    = $('#ac-' + item.uuid);
+		item.accordionGroupItems = [item.uuid];
 
 
 
@@ -42,7 +43,7 @@
 		(function initialSetup() {
 			/**
 			 * Set up some defaults for this controller
-			 * These cannot be set in the blocks `save` function becuase
+			 * These cannot be set in the blocks `save` function because
 			 * WordPress strips `tabindex` and `aria-controls` attributes from
 			 * saved post content. See `_wp_add_global_attributes` function in
 			 * wp-includes/kses.php for list of allowed attributes.
@@ -54,7 +55,7 @@
 
 			settings.scrollOffset = Math.floor(parseInt(settings.scrollOffset, 10)) || 0;
 
-			// If this item has `initally-open prop` set to true, open it
+			// If this item has `initially-open prop` set to true, open it
 			if (settings.initiallyOpen) {
 				/**
 				 * We aren't opening the item here (only setting open attributes)
@@ -80,16 +81,25 @@
 			else {
 				/**
 				 * Don't use closeItem() function call since it animates the
-				 * closing. Insteady, we only need to set the closed attributes.
+				 * closing. Instead, we only need to set the closed attributes.
 				 */
 				setCloseItemAttributes();
 			}
+
+			/**
+			 * Add any sibling accordion items to the accordionGroupItems array.
+			 */
+			$.each(item.self.siblings('.js-accordion-item'), function(index, ele) {
+				var uuid = $(ele).children('.js-accordion-controller').attr('id').replace('at-', '');
+
+				item.accordionGroupItems.push(uuid);
+			});
 		})();
 
 
 
 		/**
-		 * Defualt click function
+		 * Default click function
 		 * Called when an accordion controller is clicked.
 		 */
 		function clickHandler() {
@@ -195,7 +205,23 @@
 		 * opened after initial plugin setup.
 		 */
 		$(document).on('openAccordionItem', function(event, ele) {
-			if (ele !== item) {
+			/**
+			 * Only trigger potential close if two conditions are met:
+			 *
+			 * 1. This isn't the item the user just clicked to open.
+			 * 2. This accordion is in the same group of accordions as the one
+			 *    that was just clicked to open.
+			 *
+			 * This serves two purposes:
+			 *
+			 * 1. It allows nesting of accordions to work.
+			 * 2. It allows users to group accordions to control independently
+			 *    of other groups of accordions.
+			 */
+			if (
+				ele !== item &&
+				ele.accordionGroupItems.indexOf(item.uuid) > 0
+			) {
 				maybeCloseItem();
 			}
 		});
