@@ -29,9 +29,10 @@
 		item.self       = $(this);
 		item.id         = $(this).attr('id');
 		item.controller = $(this).children('.js-accordion-controller');
-		item.uuid       = item.controller.attr('id').replace('at-', '');
+		item.uuid       = getAccordionItemUUID(item.self);
 		item.content    = $('#ac-' + item.uuid);
 		item.accordionGroupItems = [item.uuid];
+		item.accordionAncestorItems = [];
 
 
 
@@ -55,11 +56,29 @@
 
 			settings.scrollOffset = Math.floor(parseInt(settings.scrollOffset, 10)) || 0;
 
+			/**
+			 * Add any sibling accordion items to the accordionGroupItems array.
+			 */
+			$.each(item.self.siblings('.js-accordion-item'), function(index, ele) {
+				var uuid = getAccordionItemUUID(ele);
+
+				item.accordionGroupItems.push(uuid);
+			});
+
+			/**
+			 * Add any parent accordion items to the accordionAncestorItems array.
+			 */
+			$.each(item.self.parents('.js-accordion-item'), function(index, ele) {
+				var uuid = getAccordionItemUUID(ele);
+
+				item.accordionAncestorItems.push(uuid);
+			});
+
 			// If this item has `initially-open prop` set to true, open it
 			if (settings.initiallyOpen) {
 				/**
 				 * We aren't opening the item here (only setting open attributes)
-				 * becuase the openItem() function fires the `openAccordionItem`
+				 * because the openItem() function fires the `openAccordionItem`
 				 * event which, if `autoClose` is set, would override the users
 				 * defined initiallyOpen settings.
 				 *
@@ -76,6 +95,11 @@
 				 * the other items to close so the user can focus on this item.
 				 */
 				openItem();
+
+				// Open ancestors if necessary
+				$.each(item.accordionAncestorItems, function(index, uuid) {
+					$(document).trigger('openAncestorAccordionItem', uuid);
+				});
 			}
 			// Otherwise, close the item
 			else {
@@ -85,15 +109,6 @@
 				 */
 				setCloseItemAttributes();
 			}
-
-			/**
-			 * Add any sibling accordion items to the accordionGroupItems array.
-			 */
-			$.each(item.self.siblings('.js-accordion-item'), function(index, ele) {
-				var uuid = $(ele).children('.js-accordion-controller').attr('id').replace('at-', '');
-
-				item.accordionGroupItems.push(uuid);
-			});
 		})();
 
 
@@ -114,6 +129,15 @@
 			}
 
 			return false;
+		}
+
+
+
+		/**
+		 * Get the accordion item UUID for a given accordion item DOM element.
+		 */
+		function getAccordionItemUUID(ele) {
+			return $(ele).children('.js-accordion-controller').attr('id').replace('at-', '');
 		}
 
 
@@ -150,7 +174,7 @@
 		function setOpenItemAttributes() {
 			item.self.addClass('is-open is-read');
 			item.controller.attr('aria-expanded', true);
-			item.content.prop('hidden');
+			item.content.prop('hidden', false);
 		}
 
 
@@ -206,25 +230,48 @@
 		 */
 		$(document).on('openAccordionItem', function(event, ele) {
 			/**
-			 * Only trigger potential close if two conditions are met:
+			 * Only trigger potential close these conditions are met:
 			 *
 			 * 1. This isn't the item the user just clicked to open.
 			 * 2. This accordion is in the same group of accordions as the one
 			 *    that was just clicked to open.
+			 * 3. This accordion is not an ancestor of the item that was just
+			 *    clicked to open.
 			 *
 			 * This serves two purposes:
 			 *
 			 * 1. It allows nesting of accordions to work.
 			 * 2. It allows users to group accordions to control independently
 			 *    of other groups of accordions.
+			 * 3. It allows child accordions to be opened via hash change
+			 *    without automatically closing the parent accordion, therefore
+			 *    hiding the accordion the user just indicated they wanted open.
 			 */
 			if (
 				ele !== item &&
-				ele.accordionGroupItems.indexOf(item.uuid) > 0
+				ele.accordionGroupItems.indexOf(item.uuid) > 0 &&
+				ele.accordionAncestorItems.indexOf(item.uuid) === -1
 			) {
 				maybeCloseItem();
 			}
 		});
+
+
+
+		/**
+		 * Listen for ancestor opening requests
+		 *
+		 * The `openAncestorAccordionItem` event is fired whenever a nested
+		 * accordion item is opened, but the ancestors may also need to be
+		 * opened.
+		 */
+		$(document).on('openAncestorAccordionItem', function(event, uuid) {
+			if (uuid === item.uuid) {
+				openItem();
+			}
+		});
+
+
 
 		item.controller.on('keydown', function(event) {
 			var code = event.which;
@@ -255,6 +302,11 @@
 				if (ele.length && ele.hasClass('js-accordion-item')) {
 					// Open clicked item
 					openItem();
+
+					// Open ancestors if necessary
+					$.each(item.accordionAncestorItems, function(index, uuid) {
+						$(document).trigger('openAncestorAccordionItem', uuid);
+					});
 				}
 			}
 		});

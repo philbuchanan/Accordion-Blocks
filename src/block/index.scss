@@ -72,7 +72,7 @@ $color-open-icon: #777;
 }
 
 .is-open {
-	.c-accordion__title {
+	> .c-accordion__title {
 		&:after {
 			content: "\2212";
 		}
