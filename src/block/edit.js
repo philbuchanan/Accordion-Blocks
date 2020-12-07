@@ -12,7 +12,7 @@ import {
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
-	Toolbar,
+	ToolbarGroup,
 	ToggleControl,
 	RangeControl,
 	Button,
@@ -136,7 +136,7 @@ const AccordionItemEdit = ({
 	return (
 		<Fragment>
 			<BlockControls>
-				<Toolbar
+				<ToolbarGroup
 					controls={
 						['h1', 'h2', 'h3', 'h4', 'button'].map((tag) => ({
 							icon: <HtmlTagIcon tag={ tag }/>,
@@ -156,7 +156,7 @@ const AccordionItemEdit = ({
 							borderTop: '1px solid #f0f0f0',
 						} }
 					>
-						{ __('This accordion item is nested inside another accordion item. It may not function as expected.', 'accordion-blocks') }
+						{ __('This accordion item is nested inside another accordion item. While this will work, it may not be what you intended.', 'accordion-blocks') }
 					</div>
 				) }
 				<PanelBody title={ __('Accordion Item Settings', 'accordion-blocks') }>
