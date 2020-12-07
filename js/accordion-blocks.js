@@ -150,7 +150,7 @@
 		function setOpenItemAttributes() {
 			item.self.addClass('is-open is-read');
 			item.controller.attr('aria-expanded', true);
-			item.content.removeAttr('hidden');
+			item.content.prop('hidden');
 		}
 
 
@@ -194,7 +194,7 @@
 		/**
 		 * Add event listeners
 		 */
-		item.controller.click(clickHandler);
+		item.controller.on('click', clickHandler);
 
 
 
@@ -226,7 +226,7 @@
 			}
 		});
 
-		item.controller.keydown(function(event) {
+		item.controller.on('keydown', function(event) {
 			var code = event.which;
 
 			if (item.controller.prop('tagName') !== 'BUTTON') {
