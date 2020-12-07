@@ -3,9 +3,9 @@ Contributors: philbuchanan
 Author URI: https://philbuchanan.com/
 Donate Link: https://philbuchanan.com/donate/
 Tags: accordion, accordions, gutenberg, block, responsive
-Requires at least: 5.4
-Tested up to: 5.5
-Stable tag: 1.1.6
+Requires at least: 5.5
+Tested up to: 5.6
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,6 +23,7 @@ The accordions should blend seamlessly with your theme. However, you may want to
 * Supports multiple accordions with individual settings for each accordion item.
 * Fully responsive.
 * Support for item IDs and direct links.
+* Supports nesting accordions.
 * Accessible (for users requiring tabbed keyboard navigation control).
 
 = Optional Features =
@@ -88,6 +89,12 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 2. Accordion block in the editor
 
 == Changelog ==
+= 1.2.0 =
+* Added support for WordPress 5.6, including fixing jQuery Migrate issues.
+* Added support for grouping accordion items.
+* Added support for nested accordion items.
+* Removed accordion settings API for getting and setting defaults in favour of use useEntityProp.
+
 = 1.1.6 =
 * Fixed: Use sample content (instead of real content) to preview custom blocks styles in the editor.
 * Fixed: Bumped required version to WordPress 5.4.
@@ -139,8 +146,11 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.2.0 =
+Adds support for WordPress 5.6. Also adds support for nested and grouped accordion items.
+
 = 1.1.6 =
-* Accordions now use sample content (instead of real content) to preview custom blocks styles in the editor. This should resolved slow performance in the editor if an accordion using custom block styles and has a lot of content.
+Accordions now use sample content (instead of real content) to preview custom blocks styles in the editor. This should resolved slow performance in the editor if an accordion using custom block styles and has a lot of content.
 
 = 1.1.5 =
 Fixed PHP notice for API.
