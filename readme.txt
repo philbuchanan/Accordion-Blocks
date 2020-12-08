@@ -89,6 +89,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 2. Accordion block in the editor
 
 == Changelog ==
+= 1.2.1 =
+* Fixed PHP error that slipped through.
+
 = 1.2.0 =
 * Added support for WordPress 5.6, including fixing jQuery Migrate issues.
 * Added support for grouping accordion items.
@@ -146,6 +149,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.2.1 =
+Fixed PHP error that slipped through in 1.2.0. Sorry about that.
+
 = 1.2.0 =
 Adds support for WordPress 5.6. Also adds support for nested and grouped accordion items.
 
