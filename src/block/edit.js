@@ -119,7 +119,7 @@ const AccordionItemEdit = ({
 			<BlockControls>
 				<Toolbar
 					controls={
-						['h1', 'h2', 'h3', 'h4', 'button'].map((tag) => ({
+						['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'button'].map((tag) => ({
 							icon: getHTMLTagIcon(tag),
 							title: tag.toUpperCase(),
 							isActive: titleTag === tag,
