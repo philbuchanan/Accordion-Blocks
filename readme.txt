@@ -32,7 +32,7 @@ The accordions should blend seamlessly with your theme. However, you may want to
 * Disable auto closing of accordion items.
 * Manually close items by clicking the title again.
 * Scroll page to title when it's clicked open (including setting a scroll offset position).
-* Set the HTML heading tag for the title element (h1–h4, button).
+* Set the HTML heading tag for the title element (h1–h6, button).
 * Set defaults to be applied to all new accordion items or reset a specific accordion item to the defaults.
 * Supports adding custom block styles using `wp.blocks.registerBlockStyle`.
 

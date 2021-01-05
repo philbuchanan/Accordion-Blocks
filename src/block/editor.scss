@@ -1,0 +1,17 @@
+body {
+	.ac-heading-level-dropdown .components-popover__content {
+		min-width: 266px;
+
+		// Remove padding in heading level control popover since the toolbar
+		// buttons already have padding.
+		> div {
+			padding: 0;
+		}
+	}
+
+	// The dropdown already has a border, so we can remove the one on the
+	// heading level toolbar.
+	.ac-heading-level-toolbar {
+		border: none;
+	}
+}
