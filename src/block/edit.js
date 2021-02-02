@@ -53,36 +53,20 @@ const AccordionItemEdit = ({
 		return !!parentBlocks.length;
 	});
 
-	const [defaults, setDefaults] = useEntityProp('root', 'site', 'accordion_blocks_defaults');
-
-	const saveDefaults = () => {
-		setDefaults({
-			initiallyOpen: initiallyOpen,
-			clickToClose: clickToClose,
-			autoClose: autoClose,
-			scroll: scroll,
-			scrollOffset: scrollOffset,
-		});
-
+	const userCanSetDefaults = useSelect((select) => {
 		/**
-		 * Calling `setDefaults()` only sets the entity prop, but doesn't
-		 * actually save it to the database. Currently saving to the database
-		 * must be done explicitly using the `saveEditedEntityRecord` action.
+		 * Only Administrators and Editors may set new default settings. Only
+		 * editors and above can create pages, so we use that as a proxy for
+		 * editor role and above.
 		 */
-		dispatch('core').saveEditedEntityRecord('root', 'site');
-	};
+		return select('core').canUser('create', 'pages');
+	});
 
-	const restoreDefaults = () => {
-		setAttributes({
-			initiallyOpen: defaults.initiallyOpen,
-			clickToClose: defaults.clickToClose,
-			autoClose: defaults.autoClose,
-			scroll: defaults.scroll,
-			scrollOffset: defaults.scrollOffset,
-		});
-	};
+	const defaults = useSelect((select) => {
+		return select('accordion-blocks').getDefaultSettings();
+	});
 
-	const areSettingsDefaults =
+	const settingsAreDefaults =
 		!(defaults === undefined || defaults === null) &&
 		initiallyOpen === defaults.initiallyOpen &&
 		clickToClose === defaults.clickToClose &&
@@ -277,37 +261,50 @@ const AccordionItemEdit = ({
 							help={ __('A pixel offset for the final scroll position.', 'accordion-blocks') }
 						/>
 					) }
-					{ !areSettingsDefaults && (
+					{ !settingsAreDefaults && (
 						<Fragment>
 							<hr/>
-							{ (defaults === undefined || defaults === null) && (
-								<p>
-									{ __('You have no default settings set yet.', 'accordion-blocks') }
-								</p>
-							) }
-							<Button
-								isLink={ true }
-								onClick={ saveDefaults }
-							>
-								{ __('Make These Settings the Defaults', 'accordion-blocks') }
-							</Button>
-							<p style={ {
-								fontStyle: 'italic',
-								marginTop: '7px',
-							} }>
-								{ __('Default settings only apply when creating new accordion items.', 'accordion-blocks') }
-							</p>
-							{ !(defaults === undefined || defaults === null) && (
-								<p>
+							{ userCanSetDefaults && (
+								<Fragment>
 									<Button
 										isLink={ true }
-										isDestructive={ true }
-										onClick={ restoreDefaults }
+										onClick={ () => {
+											dispatch('accordion-blocks').saveDefaultSettings({
+												initiallyOpen: initiallyOpen,
+												clickToClose: clickToClose,
+												autoClose: autoClose,
+												scroll: scroll,
+												scrollOffset: scrollOffset,
+											});
+										} }
 									>
-										{ __('Reset These Settings to Defaults', 'accordion-blocks') }
+										{ __('Make These Settings the Defaults', 'accordion-blocks') }
 									</Button>
-								</p>
+									<p style={ {
+										fontStyle: 'italic',
+										marginTop: '7px',
+									} }>
+										{ __('Default settings only apply when creating new accordion items.', 'accordion-blocks') }
+									</p>
+								</Fragment>
 							) }
+							<p>
+								<Button
+									isLink={ true }
+									isDestructive={ true }
+									onClick={ () => {
+										setAttributes({
+											initiallyOpen: defaults.initiallyOpen,
+											clickToClose: defaults.clickToClose,
+											autoClose: defaults.autoClose,
+											scroll: defaults.scroll,
+											scrollOffset: defaults.scrollOffset,
+										});
+									} }
+								>
+									{ __('Reset These Settings to Defaults', 'accordion-blocks') }
+								</Button>
+							</p>
 						</Fragment>
 					) }
 				</PanelBody>

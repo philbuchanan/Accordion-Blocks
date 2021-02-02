@@ -4,7 +4,7 @@
  * Plugin Name: Accordion Blocks
  * Plugin URI: https://github.com/philbuchanan/Accordion-Blocks
  * Description: Gutenberg blocks for creating responsive accordion drop-downs.
- * Version: 1.2.2
+ * Version: 1.3.0
  * Requires at least: 5.5
  * Author: Phil Buchanan
  * Author URI: https://philbuchanan.com
@@ -50,6 +50,9 @@ class PB_Accordion_Blocks {
 		// Register defaults site setting
 		add_action('rest_api_init', array($this, 'register_settings'));
 		add_action('admin_init', array($this, 'register_settings'));
+
+		// Add API endpoint to get and set settings
+		add_action('rest_api_init', array($this, 'register_rest_routes'));
 	}
 
 
@@ -160,6 +163,72 @@ class PB_Accordion_Blocks {
 				),
 			)
 		);
+	}
+
+
+
+	/**
+	 * Register rest endpoint to get and set plugin defaults
+	 */
+	public function register_rest_routes() {
+		register_rest_route('accordion-blocks/v1', '/defaults', array(
+			'methods' => WP_REST_Server::READABLE,
+			'callback' => array($this, 'api_get_defaults'),
+			'permission_callback' => function() {
+				return current_user_can('edit_posts');
+			}
+		));
+
+		register_rest_route('accordion-blocks/v1', '/defaults', array(
+			'methods' => WP_REST_Server::EDITABLE,
+			'callback' => array($this, 'api_set_defaults'),
+			'permission_callback' => function() {
+				return current_user_can('publish_pages');
+			}
+		));
+	}
+
+
+
+	/**
+	 * Get accordion block default settings
+	 *
+	 * @return object Default accordion block settings object
+	 */
+	public function api_get_defaults(WP_REST_Request $request) {
+		$response = new WP_REST_Response(get_option('accordion_blocks_defaults'));
+		$response->set_status(200);
+
+		return $response;
+	}
+
+
+
+	/**
+	 * Set accordion block default settings
+	 *
+	 * @param data object The date passed from the API
+	 * @return object Default accordion block settings object
+	 */
+	public function api_set_defaults($request) {
+		$old_defaults = get_option('accordion_blocks_defaults');
+
+		$new_defaults = json_decode($request->get_body());
+
+		$new_defaults = (object) array(
+			'initiallyOpen' => isset($new_defaults->initiallyOpen) ? $new_defaults->initiallyOpen : $old_defaults->initiallyOpen,
+			'clickToClose'  => isset($new_defaults->clickToClose)  ? $new_defaults->clickToClose  : $old_defaults->clickToClose,
+			'autoClose'     => isset($new_defaults->autoClose)     ? $new_defaults->autoClose     : $old_defaults->autoClose,
+			'scroll'        => isset($new_defaults->scroll)        ? $new_defaults->scroll        : $old_defaults->scroll,
+			'scrollOffset'  => isset($new_defaults->scrollOffset)  ? $new_defaults->scrollOffset  : $old_defaults->scrollOffset,
+		);
+
+		$updated = update_option('accordion_blocks_defaults', $new_defaults);
+
+		$response = new WP_REST_Response($new_defaults);
+		$response->set_status($updated ? 201 : 500);
+
+		return $response;
 	}
 
 
