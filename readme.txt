@@ -4,8 +4,8 @@ Author URI: https://philbuchanan.com/
 Donate Link: https://philbuchanan.com/donate/
 Tags: accordion, accordions, gutenberg, block, responsive
 Requires at least: 5.5
-Tested up to: 5.6
-Stable tag: 1.3.0
+Tested up to: 5.7
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,10 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 2. Accordion block in the editor
 
 == Changelog ==
+= 1.3.1 =
+* Added support for WordPress 5.7.
+* New method for generating uuids that should be more reliable.
+
 = 1.3.0 =
 * New: Added h5 and h6 as options for title tag.
 * New: Only users with the role of Editor or Administrator can set new default settings. All users can restore settings to defaults. This lays the groundwork for the ability to make this user definable in a settings page which may come in a future release.
@@ -157,6 +161,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.3.1 =
+Support for WordPress 5.7 and a new method for generating uuids that should be more reliable.
+
 = 1.3.0 =
 Added h5 and h6 options for the title tag and fixed a bug where Authors may not be able to create functioning accordions.
 
