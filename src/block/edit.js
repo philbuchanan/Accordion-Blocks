@@ -2,7 +2,8 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Fragment, useEffect } from '@wordpress/element';
+import { Fragment, useEffect, useState } from '@wordpress/element';
+import { useInstanceId } from '@wordpress/compose';
 import { useSelect, dispatch } from '@wordpress/data';
 import {
 	BlockControls,
@@ -28,8 +29,6 @@ import { useEntityProp } from '@wordpress/core-data';
 import HtmlTagIcon from './html-tag-icon';
 import classnames from '../utils/classnames';
 
-let uniqueIds = [];
-
 const AccordionItemEdit = ({
 	className,
 	attributes,
@@ -46,6 +45,40 @@ const AccordionItemEdit = ({
 		scrollOffset,
 		uuid,
 	} = attributes;
+
+	// An accordion item is considered new if it doesn't have a UUID yet
+	const [isNew, setIsNew] = useState(!uuid);
+
+	/**
+	 * UUID is generated as a combination of the post ID and this block's
+	 * instance ID.
+	 *
+	 * This ensures the UUID is unique not just in this post, but across all
+	 * posts. This is necessary since accordions from multiple posts may be
+	 * displayed on the same page (e.g. an archive page that shows the full post
+	 * content). See issue #31.
+	 *
+	 * We use instanceId so a new UUID is generated even if the accordion item
+	 * is duplicated. See issue #47.
+	 *
+	 * TODO: The one downside to this approach is that sometimes accordion
+	 * items' UUIDs change when the editor is reloaded. For example, if the user
+	 * removes a block and saves the page, when the editor loads again, it will
+	 * assign new instanceIds to each block.
+	 */
+	const instanceId = useInstanceId(AccordionItemEdit);
+	const postId = useSelect((select) => {
+		return select('core/editor').getCurrentPostId();
+	});
+
+	useEffect(() => {
+		const id = Number(`${ postId }${ instanceId }`);
+
+		if (id !== uuid) {
+			console.log('set new uuid', id);
+			setAttributes({uuid: id});
+		}
+	}, [instanceId]);
 
 	const isNestedAccordion = useSelect((select) => {
 		const parentBlocks = select('core/block-editor').getBlockParentsByBlockName(clientId, 'pb/accordion-item');
@@ -75,25 +108,12 @@ const AccordionItemEdit = ({
 		scrollOffset === defaults.scrollOffset;
 
 	useEffect(() => {
-		let id = uuid;
-
 		/**
-		 * This check needs to be done before checking for an existing uuid or
-		 * setting a new uuid since we use the uuid as an indicator of whether
-		 * this is a new accordion item. If no uuid is set yet, it is assumed
-		 * that this is a new accordion item and therefore the default settings
-		 * should be applied.
+		 * We only set this accordion item's attributes to defaults if it is new
+		 * and its attributes aren't already the defaults.
 		 */
-		if (!defaults) {
-			// If defaults haven't been received yet, abort early
-			return;
-		}
-
-		/**
-		 * If there is no uuid set, this is a new accordion. That means the
-		 * default settings should apply to this block.
-		 */
-		if (!id) {
+		if (isNew && !settingsAreDefaults) {
+			console.log('set defaults');
 			setAttributes({
 				initiallyOpen: defaults.initiallyOpen,
 				clickToClose: defaults.clickToClose,
@@ -101,22 +121,6 @@ const AccordionItemEdit = ({
 				scroll: defaults.scroll,
 				scrollOffset: defaults.scrollOffset,
 			});
-		}
-
-		/**
-		 * Set the uuid attribute to something that is very likely to be unique
-		 * across multiple posts. This fixes the issues outlined in #31 and #47.
-		 */
-		if (!id || uniqueIds.includes(id)) {
-			id = Math.floor(Math.random() * (100000 - 1 + 1) + 1);
-
-			setAttributes({uuid: id});
-		}
-
-		uniqueIds.push(id);
-
-		return () => {
-			uniqueIds.splice(uniqueIds.indexOf(id), 1);
 		}
 	}, [defaults]);
 
