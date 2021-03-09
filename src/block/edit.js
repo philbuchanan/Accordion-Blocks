@@ -75,7 +75,6 @@ const AccordionItemEdit = ({
 		const id = Number(`${ postId }${ instanceId }`);
 
 		if (id !== uuid) {
-			console.log('set new uuid', id);
 			setAttributes({uuid: id});
 		}
 	}, [instanceId]);
@@ -113,7 +112,6 @@ const AccordionItemEdit = ({
 		 * and its attributes aren't already the defaults.
 		 */
 		if (isNew && !settingsAreDefaults) {
-			console.log('set defaults');
 			setAttributes({
 				initiallyOpen: defaults.initiallyOpen,
 				clickToClose: defaults.clickToClose,
