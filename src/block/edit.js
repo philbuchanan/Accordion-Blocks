@@ -22,6 +22,7 @@ import {
 	Button,
 } from '@wordpress/components';
 import { useEntityProp } from '@wordpress/core-data';
+import { DOWN } from '@wordpress/keycodes';
 
 /**
  * Internal dependencies
