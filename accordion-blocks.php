@@ -103,13 +103,15 @@ class PB_Accordion_Blocks {
 	public function enqueue_frontend_assets() {
 		$min = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
 
-		wp_enqueue_script(
-			'pb-accordion-blocks-frontend-script',
-			plugins_url("js/accordion-blocks$min.js", __FILE__),
-			array('jquery'),
-			$this->plugin_version,
-			true
-		);
+		if (has_block('pb/accordion-item', get_the_ID())) {
+			wp_enqueue_script(
+				'pb-accordion-blocks-frontend-script',
+				plugins_url("js/accordion-blocks$min.js", __FILE__),
+				array('jquery'),
+				$this->plugin_version,
+				true
+			);
+		}
 	}
 
 
