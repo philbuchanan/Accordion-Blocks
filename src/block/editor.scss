@@ -1,4 +1,4 @@
-body {
+.editor-styles-wrapper {
 	.ac-heading-level-dropdown .components-popover__content {
 		min-width: 266px;
 
@@ -13,5 +13,21 @@ body {
 	// heading level toolbar.
 	.ac-heading-level-toolbar {
 		border: none;
+	}
+
+	.c-accordion__item {
+		&:after {
+			display: block;
+			content: "";
+			width: 100%;
+			height: 1px;
+			margin: 0 auto;
+		}
+
+		&.is-selected {
+			&:after {
+				background-color: var(--wp-admin-theme-color);
+			}
+		}
 	}
 }
