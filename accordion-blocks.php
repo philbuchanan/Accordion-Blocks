@@ -36,7 +36,10 @@ class PB_Accordion_Blocks {
 		// Register block
 		add_action('init', array($this, 'register_block'));
 
-		// Register frontend JavaScript
+		// Enqueue editor assets
+		add_action('enqueue_block_editor_assets', array($this, 'enqueue_editor_assets'));
+
+		// Enqueue frontend assets
 		add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_assets'));
 
 		// Tell WordPress which JavaScript files contain translations
@@ -72,27 +75,31 @@ class PB_Accordion_Blocks {
 	 * Register the block's assets for the editor
 	 */
 	public function register_block() {
+		register_block_type('pb/accordion-item');
+	}
+
+
+
+	/**
+	 * Enqueue the block's assets for the editor
+	 */
+	public function enqueue_editor_assets() {
 		// Automatically load dependencies and version
 		$asset_file = include(plugin_dir_path(__FILE__) . 'build/index.asset.php');
 
-		wp_register_script(
-			'pb-accordion-blocks-script',
+		wp_enqueue_script(
+			'pb-accordion-blocks-editor-script',
 			plugins_url('build/index.js', __FILE__),
 			$asset_file['dependencies'],
 			$asset_file['version']
 		);
 
-		wp_register_style(
-			'pb-accordion-blocks-style',
+		wp_enqueue_style(
+			'pb-accordion-blocks-editor-style',
 			plugins_url('build/index.css', __FILE__),
 			array(),
 			$asset_file['version']
 		);
-
-		register_block_type('pb/accordion-item', array(
-			'editor_script' => 'pb-accordion-blocks-script',
-			'style'         => 'pb-accordion-blocks-style',
-		));
 	}
 
 
@@ -110,6 +117,13 @@ class PB_Accordion_Blocks {
 				array('jquery'),
 				$this->plugin_version,
 				true
+			);
+
+			wp_enqueue_style(
+				'pb-accordion-blocks-style',
+				plugins_url('build/index.css', __FILE__),
+				array(),
+				$this->plugin_version
 			);
 		}
 	}
