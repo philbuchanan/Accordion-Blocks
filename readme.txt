@@ -5,7 +5,7 @@ Donate Link: https://philbuchanan.com/donate/
 Tags: accordion, accordions, gutenberg, block, responsive
 Requires at least: 5.5
 Tested up to: 5.7
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,11 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 2. Accordion block in the editor
 
 == Changelog ==
+= 1.3.2 =
+* New: Visual indicator of bottom of block when the block is selected.
+* New: Only load plugin assets when the page contains an accordion block.
+* NOTE: Work on version 2 of the plugin has begun. It will likely include breaking changes to the HTML, CSS, and JavaScript structures. There is no timeline on the release yet, but if you rely on custom CSS, you may need to make adjustments when v2.0.0 ships. This is expected to be one of the last releases until v2.0.0.
+
 = 1.3.1 =
 * Added support for WordPress 5.7.
 * New method for generating uuids that should be more reliable.
@@ -161,6 +166,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.3.2 =
+NOTE: Work on version 2 of the plugin has begun. It will likely include breaking changes to the HTML, CSS, and JavaScript structures. There is no timeline on the release yet, but if you rely on custom CSS, you may need to make adjustments when v2.0.0 ships. This is expected to be one of the last releases until v2.0.0. THIS RELEASE: Only load assets on pages that use the block. Added visual indicator to show bottom of block.
+
 = 1.3.1 =
 Support for WordPress 5.7 and a new method for generating uuids that should be more reliable.
 

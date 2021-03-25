@@ -35,6 +35,7 @@ const AccordionItemEdit = ({
 	attributes,
 	setAttributes,
 	clientId,
+	isSelected,
 }) => {
 	const {
 		title,
@@ -49,6 +50,16 @@ const AccordionItemEdit = ({
 
 	// An accordion item is considered new if it doesn't have a UUID yet
 	const [isNew, setIsNew] = useState(!uuid);
+
+	const isParentOfSelectedBlock = useSelect((select) => {
+		return select('core/block-editor').hasSelectedInnerBlock(clientId, true);
+	});
+
+	const isAccordionItemSelected = useSelect((select) => {
+		const block = select('core/block-editor').getSelectedBlock();
+
+		return block ? block.name === 'pb/accordion-item' : false;
+	});
 
 	/**
 	 * UUID is generated as a combination of the post ID and this block's
@@ -312,7 +323,15 @@ const AccordionItemEdit = ({
 					) }
 				</PanelBody>
 			</InspectorControls>
-			<div className={ classnames('c-accordion__item', 'js-accordion-item', className) }>
+			<div
+				className={ classnames(
+					'c-accordion__item',
+					'js-accordion-item',
+					isSelected || (isParentOfSelectedBlock && !isAccordionItemSelected)
+						? 'is-selected' : '',
+					className
+				) }
+			>
 				<RichText
 					className={ classnames('c-accordion__title', {
 						'c-accordion__title--button': titleTag === 'button',
