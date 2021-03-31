@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { registerStore } from '@wordpress/data';
+import { createReduxStore, register } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 
 const initialState = {
@@ -35,7 +35,7 @@ const actions = {
 	},
 };
 
-registerStore('accordion-blocks', {
+const store = createReduxStore('accordion-blocks', {
 	reducer(state = initialState, action) {
 		switch (action.type) {
 			case 'SET_DEFAULTS':
@@ -84,3 +84,5 @@ registerStore('accordion-blocks', {
 		},
 	},
 });
+
+register(store);
