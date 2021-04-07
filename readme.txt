@@ -93,7 +93,6 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * New: Visual indicator of bottom of block when the block is selected.
 * New: Only load plugin assets when the page contains an accordion block.
 * Fixed: Replaced deprecated `registerStore` with `register`.
-* NOTE: Work on version 2 of the plugin has begun. It will likely include breaking changes to the HTML, CSS, and JavaScript structures. There is no timeline on the release yet, but if you rely on custom CSS, you may need to make adjustments when v2.0.0 ships. This is expected to be one of the last releases until v2.0.0.
 
 = 1.3.1 =
 * Added support for WordPress 5.7.
@@ -168,7 +167,7 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 
 == Upgrade Notice ==
 = 1.3.2 =
-NOTE: Work on version 2 of the plugin has begun. It will likely include breaking changes to the HTML, CSS, and JavaScript structures. There is no timeline on the release yet, but if you rely on custom CSS, you may need to make adjustments when v2.0.0 ships. This is expected to be one of the last releases until v2.0.0. THIS RELEASE: Only load assets on pages that use the block. Added visual indicator to show bottom of block.
+Only load assets on pages that use the block. Added visual indicator to show bottom of block.
 
 = 1.3.1 =
 Support for WordPress 5.7 and a new method for generating uuids that should be more reliable.
