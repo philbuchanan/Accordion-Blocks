@@ -346,7 +346,7 @@ class PB_Accordion_Blocks {
 
 
 	/**
-	 * Callback function for Google Map section
+	 * Callback function for Accordion Blocks global settings section
 	 * Add section intro copy here (if necessary)
 	 */
 	public function accordion_blocks_global_settings_section_callback() {}
