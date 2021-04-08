@@ -4,7 +4,7 @@
  * Plugin Name: Accordion Blocks
  * Plugin URI: https://github.com/philbuchanan/Accordion-Blocks
  * Description: Gutenberg blocks for creating responsive accordion drop-downs.
- * Version: 1.3.3
+ * Version: 1.3.4
  * Requires at least: 5.5
  * Author: Phil Buchanan
  * Author URI: https://philbuchanan.com
@@ -56,6 +56,10 @@ class PB_Accordion_Blocks {
 
 		// Add API endpoint to get and set settings
 		add_action('rest_api_init', array($this, 'register_rest_routes'));
+
+		// Add settings page
+		add_action('admin_menu', array($this, 'add_settings_menu'));
+		add_action('admin_init', array($this, 'settings_api_init'));
 	}
 
 
@@ -108,9 +112,11 @@ class PB_Accordion_Blocks {
 	 * Enqueue the block's assets for the frontend
 	 */
 	public function enqueue_frontend_assets() {
-		$min = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
+		$load_scripts_globablly = get_option('accordion_blocks_load_scripts_globablly');
 
-		if (has_block('pb/accordion-item', get_the_ID())) {
+		if ($load_scripts_globablly || has_block('pb/accordion-item', get_the_ID())) {
+			$min = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
+
 			wp_enqueue_script(
 				'pb-accordion-blocks-frontend-script',
 				plugins_url("js/accordion-blocks$min.js", __FILE__),
@@ -177,6 +183,15 @@ class PB_Accordion_Blocks {
 					'scroll'        => false,
 					'scrollOffset'  => 0,
 				),
+			)
+		);
+
+		register_setting(
+			'accordion_blocks_settings',
+			'accordion_blocks_load_scripts_globablly',
+			array(
+				'type' => 'boolean',
+				'default' => true,
 			)
 		);
 	}
@@ -265,6 +280,108 @@ class PB_Accordion_Blocks {
 
 		return $links;
 	}
+
+
+
+	/**
+	 * Add the admin menu settings page
+	 */
+	public function add_settings_menu() {
+		add_options_page(
+			__('Accordion Blocks Settings', 'accordion-blocks'),
+			__('Accordion Blocks', 'accordion-blocks'),
+			'manage_options',
+			'accordion_blocks_settings',
+			array($this, 'render_settings_page')
+		);
+	}
+
+
+
+	/**
+	 * Render the settings page
+	 */
+	public function render_settings_page() {
+		if (!current_user_can('manage_options')) {
+			wp_die(__('You do not have sufficient permissions to access this page.', 'accordion-blocks'));
+		} ?>
+
+		<div class="wrap">
+			<h2><?php _e('Accordion Blocks Settings', 'accordion-blocks'); ?></h2>
+			<form method="POST" action="options.php">
+				<?php
+					settings_fields('accordion_blocks_settings');
+					do_settings_sections('accordion_blocks_settings');
+					submit_button();
+				?>
+			</form>
+		</div>
+	<?php }
+
+
+
+	/**
+	 * Register setting sections and individual settings
+	 */
+	public function settings_api_init() {
+		add_settings_section(
+			'accordion_blocks_global_settings_section',
+			__('Global Settings', 'accordion-blocks'),
+			array($this, 'accordion_blocks_global_settings_section_callback'),
+			'accordion_blocks_settings'
+		);
+
+		add_settings_field(
+			'accordion_blocks_load_scripts_globablly',
+			__('Scripts and Styles', 'accordion-blocks'),
+			array($this, 'load_scripts_globablly_setting_callback'),
+			'accordion_blocks_settings',
+			'accordion_blocks_global_settings_section',
+			array(
+				'label_for' => 'accordion_blocks_load_scripts_globablly',
+			)
+		);
+	}
+
+
+
+	/**
+	 * Callback function for Google Map section
+	 * Add section intro copy here (if necessary)
+	 */
+	public function accordion_blocks_global_settings_section_callback() {}
+
+
+
+	/**
+	 * Callback function for load scripts globally setting
+	 */
+	public function load_scripts_globablly_setting_callback() {
+		$load_scripts_globablly = get_option('accordion_blocks_load_scripts_globablly'); ?>
+		<fieldset>
+			<legend class="screen-reader-text">
+				<span><?php _e('Scripts and Styles', 'accordion-blocks'); ?></span>
+			</legend>
+			<label for="accordion_blocks_load_scripts_globablly">
+				<input
+					type="checkbox"
+					id="accordion_blocks_load_scripts_globablly"
+					name="accordion_blocks_load_scripts_globablly"
+					aria-describedby="load-scripts-globablly"
+					<?php checked($load_scripts_globablly == 'on'); ?>
+				>
+				<?php _e('Load scripts and styles globablly', 'accordion-blocks'); ?>
+			</label>
+			<div id="load-scripts-globablly">
+				<p class="description">
+					<?php _e('Turning this off may cause accordions to stop working in some instances.', 'accordion-blocks'); ?>
+				</p>
+				<p class="description">
+					<?php _e('Leave this on if you use accordions outside of the main content editor, or are adding accordions programatically.', 'accordion-blocks'); ?>
+				</p>
+			</div>
+		</fieldset>
+	<?php }
 
 }
 
