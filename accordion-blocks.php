@@ -4,7 +4,7 @@
  * Plugin Name: Accordion Blocks
  * Plugin URI: https://github.com/philbuchanan/Accordion-Blocks
  * Description: Gutenberg blocks for creating responsive accordion drop-downs.
- * Version: 1.3.4
+ * Version: 1.3.5
  * Requires at least: 5.5
  * Author: Phil Buchanan
  * Author URI: https://philbuchanan.com
@@ -112,9 +112,9 @@ class PB_Accordion_Blocks {
 	 * Enqueue the block's assets for the frontend
 	 */
 	public function enqueue_frontend_assets() {
-		$load_scripts_globablly = get_option('accordion_blocks_load_scripts_globablly');
+		$load_scripts_globally = $this->should_load_scripts_globally();
 
-		if ($load_scripts_globablly || has_block('pb/accordion-item', get_the_ID())) {
+		if ($load_scripts_globally || has_block('pb/accordion-item', get_the_ID())) {
 			$min = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
 
 			wp_enqueue_script(
@@ -188,10 +188,10 @@ class PB_Accordion_Blocks {
 
 		register_setting(
 			'accordion_blocks_settings',
-			'accordion_blocks_load_scripts_globablly',
+			'accordion_blocks_load_scripts_globally',
 			array(
 				'type' => 'boolean',
-				'default' => true,
+				'default' => 'on',
 			)
 		);
 	}
@@ -284,6 +284,27 @@ class PB_Accordion_Blocks {
 
 
 	/**
+	 * Get the load_scripts_globally option and return true or false.
+	 */
+	private function should_load_scripts_globally() {
+		/**
+		 * This removes the old option (the option name had a typo), but ensures
+		 *  the new option gets updated with the same setting.
+		 */
+		if (get_option('accordion_blocks_load_scripts_globablly') == 'on') {
+			update_option('accordion_blocks_load_scripts_globally', 'on');
+		}
+
+		delete_option('accordion_blocks_load_scripts_globablly');
+
+		$load_scripts_globally = get_option('accordion_blocks_load_scripts_globally', 'on');
+
+		return !!$load_scripts_globally;
+	}
+
+
+
+	/**
 	 * Add the admin menu settings page
 	 */
 	public function add_settings_menu() {
@@ -332,13 +353,13 @@ class PB_Accordion_Blocks {
 		);
 
 		add_settings_field(
-			'accordion_blocks_load_scripts_globablly',
+			'accordion_blocks_load_scripts_globally',
 			__('Scripts and Styles', 'accordion-blocks'),
-			array($this, 'load_scripts_globablly_setting_callback'),
+			array($this, 'load_scripts_globally_setting_callback'),
 			'accordion_blocks_settings',
 			'accordion_blocks_global_settings_section',
 			array(
-				'label_for' => 'accordion_blocks_load_scripts_globablly',
+				'label_for' => 'accordion_blocks_load_scripts_globally',
 			)
 		);
 	}
@@ -356,28 +377,28 @@ class PB_Accordion_Blocks {
 	/**
 	 * Callback function for load scripts globally setting
 	 */
-	public function load_scripts_globablly_setting_callback() {
-		$load_scripts_globablly = get_option('accordion_blocks_load_scripts_globablly'); ?>
+	public function load_scripts_globally_setting_callback() {
+		$load_scripts_globally = $this->should_load_scripts_globally(); ?>
 		<fieldset>
 			<legend class="screen-reader-text">
 				<span><?php _e('Scripts and Styles', 'accordion-blocks'); ?></span>
 			</legend>
-			<label for="accordion_blocks_load_scripts_globablly">
+			<label for="accordion_blocks_load_scripts_globally">
 				<input
 					type="checkbox"
-					id="accordion_blocks_load_scripts_globablly"
-					name="accordion_blocks_load_scripts_globablly"
-					aria-describedby="load-scripts-globablly"
-					<?php checked($load_scripts_globablly == 'on'); ?>
+					id="accordion_blocks_load_scripts_globally"
+					name="accordion_blocks_load_scripts_globally"
+					aria-describedby="load-scripts-globally"
+					<?php checked($load_scripts_globally); ?>
 				>
-				<?php _e('Load scripts and styles globablly', 'accordion-blocks'); ?>
+				<?php _e('Load scripts and styles globally', 'accordion-blocks'); ?>
 			</label>
-			<div id="load-scripts-globablly">
+			<div id="load-scripts-globally">
 				<p class="description">
 					<?php _e('Turning this off may cause accordions to stop working in some instances.', 'accordion-blocks'); ?>
 				</p>
 				<p class="description">
-					<?php _e('Leave this on if you use accordions outside of the main content editor, or are adding accordions programatically.', 'accordion-blocks'); ?>
+					<?php _e('Turn this on if you use accordions outside of the main content editor, or are adding accordions programatically.', 'accordion-blocks'); ?>
 				</p>
 			</div>
 		</fieldset>

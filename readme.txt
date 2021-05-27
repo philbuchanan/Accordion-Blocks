@@ -5,7 +5,7 @@ Donate Link: https://philbuchanan.com/donate/
 Tags: accordion, accordions, gutenberg, block, responsive
 Requires at least: 5.5
 Tested up to: 5.7
-Stable tag: 1.3.4
+Stable tag: 1.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 2. Accordion block in the editor
 
 == Changelog ==
+= 1.3.5 =
+* Fixed: An issue where the global loading of scripts and styles checkbox was checked when the setting was actually off.
+
 = 1.3.4 =
 * Fixed: Made turning off global loading of scripts and styles an explicit setting. You can turn off this off in Settings > Accordion Blocks.
 
@@ -172,6 +175,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.3.5 =
+Fixed an issue where the global loading of scripts and styles checkbox was checked when the setting was actually off.
+
 = 1.3.4 =
 Made turning off global loading of scripts and styles an explicit setting. You can turn off this off in Settings > Accordion Blocks.
 

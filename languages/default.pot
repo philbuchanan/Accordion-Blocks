@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Accordion Blocks\n"
-"POT-Creation-Date: 2021-04-08 09:52-0400\n"
+"POT-Creation-Date: 2021-05-27 12:31-0400\n"
 "PO-Revision-Date: 2020-04-06 18:05-0400\n"
 "Last-Translator: Phil Buchanan <info@philbuchanan.com>\n"
 "Language-Team: Phil Buchanan\n"
@@ -25,60 +25,36 @@ msgstr ""
 msgid "Donate"
 msgstr ""
 
-#: ../accordion-blocks.php:291 ../accordion-blocks.php:310
+#: ../accordion-blocks.php:312 ../accordion-blocks.php:331
 msgid "Accordion Blocks Settings"
 msgstr ""
 
-#: ../accordion-blocks.php:292
+#: ../accordion-blocks.php:313
 msgid "Accordion Blocks"
 msgstr ""
 
-#: ../accordion-blocks.php:306 ../inc/admin-page.php:24
+#: ../accordion-blocks.php:327
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: ../accordion-blocks.php:329
+#: ../accordion-blocks.php:350
 msgid "Global Settings"
 msgstr ""
 
-#: ../accordion-blocks.php:336 ../accordion-blocks.php:363
+#: ../accordion-blocks.php:357 ../accordion-blocks.php:384
 msgid "Scripts and Styles"
 msgstr ""
 
-#: ../accordion-blocks.php:373
-msgid "Load scripts and styles globablly"
+#: ../accordion-blocks.php:394
+msgid "Load scripts and styles globally"
 msgstr ""
 
-#: ../accordion-blocks.php:377
+#: ../accordion-blocks.php:398
 msgid "Turning this off may cause accordions to stop working in some instances."
 msgstr ""
 
-#: ../accordion-blocks.php:380
-msgid "Leave this on if you use accordions outside of the main content editor, or are adding accordions programatically."
-msgstr ""
-
-#: ../inc/admin-page.php:8 ../inc/admin-page.php:9 ../inc/admin-page.php:28
-msgid "Theme Settings"
-msgstr ""
-
-#: ../inc/admin-page.php:47
-msgid "Google Maps Settings"
-msgstr ""
-
-#: ../inc/admin-page.php:54
-msgid "Google Maps API Key"
-msgstr ""
-
-#: ../inc/admin-page.php:65
-msgid "Google Maps Pin Color"
-msgstr ""
-
-#: ../inc/admin-page.php:110
-msgid "Learn how to get a Google Maps API key"
-msgstr ""
-
-#: ../inc/admin-page.php:137
-msgid "A hex color value (e.g. #acd123) to use as the default Google Maps marker pin color."
+#: ../accordion-blocks.php:401
+msgid "Turn this on if you use accordions outside of the main content editor, or are adding accordions programatically."
 msgstr ""
 
 #: ../src/block/edit.js:161 ../src/block/edit.js:171
