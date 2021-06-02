@@ -140,7 +140,7 @@ class PB_Accordion_Blocks {
 	 * Tell WordPress which JavaScript files contain translations
 	 */
 	function set_script_translations() {
-		wp_set_script_translations('pb-accordion-blocks-script', 'accordion-blocks');
+		wp_set_script_translations('pb-accordion-blocks-editor-script', 'accordion-blocks');
 	}
 
 
