@@ -10,6 +10,7 @@ import {
 	InspectorControls,
 	RichText,
 	InnerBlocks,
+	useBlockProps,
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
@@ -133,6 +134,13 @@ const AccordionItemEdit = ({
 			});
 		}
 	}, [defaults]);
+
+	const blockProps = useBlockProps({
+		className: classnames(
+			'c-accordion__item',
+			'js-accordion-item',
+		)
+	});
 
 	return (
 		<Fragment>
@@ -323,15 +331,7 @@ const AccordionItemEdit = ({
 					) }
 				</PanelBody>
 			</InspectorControls>
-			<div
-				className={ classnames(
-					'c-accordion__item',
-					'js-accordion-item',
-					isSelected || (isParentOfSelectedBlock && !isAccordionItemSelected)
-						? 'is-selected' : '',
-					className
-				) }
-			>
+			<div { ...blockProps }>
 				<RichText
 					className={ classnames('c-accordion__title', {
 						'c-accordion__title--button': titleTag === 'button',
