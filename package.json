@@ -1,6 +1,6 @@
 {
   "name": "accordion-blocks",
-  "version": "1.3.5",
+  "version": "1.4.0",
   "description": "Gutenberg blocks for creating responsive accordion drop-downs.",
   "main": "src/index.js",
   "scripts": {

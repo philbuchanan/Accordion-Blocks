@@ -4,8 +4,10 @@
  * Plugin Name: Accordion Blocks
  * Plugin URI: https://github.com/philbuchanan/Accordion-Blocks
  * Description: Gutenberg blocks for creating responsive accordion drop-downs.
- * Version: 1.3.5
- * Requires at least: 5.5
+ * Version: 1.4.0
+ * Requires at least: 5.8
+ * Tested up to: 5.8
+ * Requires PHP: 7.3
  * Author: Phil Buchanan
  * Author URI: https://philbuchanan.com
  * License: GPLv2 or later
@@ -35,9 +37,6 @@ class PB_Accordion_Blocks {
 
 		// Register block
 		add_action('init', array($this, 'register_block'));
-
-		// Enqueue editor assets
-		add_action('enqueue_block_editor_assets', array($this, 'enqueue_editor_assets'));
 
 		// Enqueue frontend assets
 		add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_assets'));
@@ -79,31 +78,7 @@ class PB_Accordion_Blocks {
 	 * Register the block's assets for the editor
 	 */
 	public function register_block() {
-		register_block_type('pb/accordion-item');
-	}
-
-
-
-	/**
-	 * Enqueue the block's assets for the editor
-	 */
-	public function enqueue_editor_assets() {
-		// Automatically load dependencies and version
-		$asset_file = include(plugin_dir_path(__FILE__) . 'build/index.asset.php');
-
-		wp_enqueue_script(
-			'pb-accordion-blocks-editor-script',
-			plugins_url('build/index.js', __FILE__),
-			$asset_file['dependencies'],
-			$asset_file['version']
-		);
-
-		wp_enqueue_style(
-			'pb-accordion-blocks-editor-style',
-			plugins_url('build/index.css', __FILE__),
-			array(),
-			$asset_file['version']
-		);
+		register_block_type(__DIR__);
 	}
 
 
