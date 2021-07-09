@@ -2,7 +2,11 @@
  * WordPress dependencies
  */
 import { registerBlockType } from '@wordpress/blocks';
-import { InnerBlocks, RichText } from '@wordpress/block-editor';
+import {
+	InnerBlocks,
+	RichText,
+	useBlockProps,
+} from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
@@ -58,15 +62,17 @@ registerBlockType('pb/accordion-item', {
 			contentStyles.display = 'none';
 		}
 
+		const blockProps = useBlockProps.save({
+			className: [...itemClasses, className].join(' '),
+			'data-initially-open': initiallyOpen,
+			'data-click-to-close': clickToClose,
+			'data-auto-close': autoClose,
+			'data-scroll': scroll,
+			'data-scroll-offset': scrollOffset,
+		});
+
 		return (
-			<div
-				className={ [...itemClasses, className].join(' ') }
-				data-initially-open={ initiallyOpen }
-				data-click-to-close={ clickToClose }
-				data-auto-close={ autoClose }
-				data-scroll={ scroll }
-				data-scroll-offset={ scrollOffset }
-			>
+			<div { ...blockProps }>
 				<RichText.Content
 					id={ 'at-' + uuid }
 					className={ titleClasses.join(' ') }
