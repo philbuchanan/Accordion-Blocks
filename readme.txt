@@ -90,6 +90,13 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 2. Accordion block in the editor
 
 == Changelog ==
+= 1.4.0 =
+* New: Use block API v2 with useBlockProps.
+* Fixed: Registering block with block.json file.
+* Fixed: Use BlockControls group setting for title tag toolbar.
+* Fixed: Replaced deprecated `registerStore` with `register`.
+* Fixed: Reference to which script contains translations is now correct.
+
 = 1.3.5 =
 * Fixed: An issue where the global loading of scripts and styles checkbox was checked when the setting was actually off.
 
