@@ -183,6 +183,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.4.0 =
+Fixed a bunch of compatibility issues with WordPress 5.8 (and the widgets block editor).
+
 = 1.3.5 =
 Fixed an issue where the global loading of scripts and styles checkbox was checked when the setting was actually off.
 
