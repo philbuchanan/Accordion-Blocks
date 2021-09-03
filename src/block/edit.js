@@ -144,82 +144,50 @@ const AccordionItemEdit = ({
 
 	return (
 		<Fragment>
-			<BlockControls>
-				<ToolbarGroup>
-					<Dropdown
-						popoverProps={ {
-							className: 'ac-heading-level-dropdown',
-							isAlternate: true,
-						} }
-						position="bottom right"
-						renderToggle={ ({isOpen, onToggle}) => {
-							const openOnArrowDown = (event) => {
-								if (!isOpen && event.keyCode === DOWN) {
-									event.preventDefault();
-									event.stopPropagation();
-									onToggle();
-								}
-							};
-
-							return (
-								<ToolbarButton
-									aria-expanded={ isOpen }
-									aria-haspopup="true"
-									icon={ <HtmlTagIcon tag={ titleTag } /> }
-									label={ __('Change accordion title tag', 'accordion-blocks') }
-									onClick={ onToggle }
-									onKeyDown={ openOnArrowDown }
-									showTooltip
-								/>
-							);
-						} }
-						renderContent={ () => (
-							<Toolbar
-								className="ac-heading-level-toolbar"
-								label={ __('Change accordion title tag', 'accordion-blocks') }
-							>
-								<ToolbarGroup
-									isCollapsed={ false }
-									controls={
-										[{
-											tag: 'h1',
-											label: __('Heading 1', 'accordion-blocks'),
-										},
-										{
-											tag: 'h2',
-											label: __('Heading 2', 'accordion-blocks'),
-										},
-										{
-											tag: 'h3',
-											label: __('Heading 3', 'accordion-blocks'),
-										},
-										{
-											tag: 'h4',
-											label: __('Heading 4', 'accordion-blocks'),
-										},
-										{
-											tag: 'h5',
-											label: __('Heading 5', 'accordion-blocks'),
-										},
-										{
-											tag: 'h6',
-											label: __('Heading 6', 'accordion-blocks'),
-										},
-										{
-											tag: 'button',
-											label: __('Button', 'accordion-blocks'),
-										}].map((tag) => ({
-											icon: <HtmlTagIcon tag={ tag.tag }/>,
-											title: tag.label,
-											isActive: titleTag === tag.tag,
-											onClick: () => setAttributes({'titleTag': tag.tag}),
-										}))
-									}
-								/>
-							</Toolbar>
-						) }
-					/>
-				</ToolbarGroup>
+			<BlockControls group="block">
+				<ToolbarGroup
+					icon={ <HtmlTagIcon tag={ titleTag } /> }
+					label={ __('Change accordion title tag', 'pb') }
+					controls={ [
+						{
+							tag: 'h1',
+							label: __('Heading 1', 'accordion-blocks'),
+						},
+						{
+							tag: 'h2',
+							label: __('Heading 2', 'accordion-blocks'),
+						},
+						{
+							tag: 'h3',
+							label: __('Heading 3', 'accordion-blocks'),
+						},
+						{
+							tag: 'h4',
+							label: __('Heading 4', 'accordion-blocks'),
+						},
+						{
+							tag: 'h5',
+							label: __('Heading 5', 'accordion-blocks'),
+						},
+						{
+							tag: 'h6',
+							label: __('Heading 6', 'accordion-blocks'),
+						},
+						{
+							tag: 'button',
+							label: __('Button', 'accordion-blocks'),
+						},
+					].map((control) => {
+						return {
+							name: control.tag,
+							icon: <HtmlTagIcon tag={ control.tag } />,
+							title: control.label,
+							isActive: titleTag === control.tag,
+							onClick: () => setAttributes({'titleTag': control.tag}),
+						}
+					}) }
+					isCollapsed={ true }
+				/>
 			</BlockControls>
 			<InspectorControls>
 				{ isNestedAccordion && (
