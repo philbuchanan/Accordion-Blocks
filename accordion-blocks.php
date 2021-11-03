@@ -4,7 +4,7 @@
  * Plugin Name: Accordion Blocks
  * Plugin URI: https://github.com/philbuchanan/Accordion-Blocks
  * Description: Gutenberg blocks for creating responsive accordion drop-downs.
- * Version: 1.4.0
+ * Version: 1.4.1
  * Requires at least: 5.8
  * Tested up to: 5.8
  * Requires PHP: 7.3

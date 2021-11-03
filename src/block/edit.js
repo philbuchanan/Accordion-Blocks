@@ -80,12 +80,13 @@ const AccordionItemEdit = ({
 	 * assign new instanceIds to each block.
 	 */
 	const instanceId = useInstanceId(AccordionItemEdit);
-	const postId = useSelect((select) => {
-		return select('core/editor').getCurrentPostId();
+	const entityId = useSelect((select) => {
+		return select('core/editor') !== null
+			? select('core/editor').getCurrentPostId() : 0;
 	});
 
 	useEffect(() => {
-		const id = Number(`${ postId }${ instanceId }`);
+		const id = Number(`${ entityId }${ instanceId }`);
 
 		if (id !== uuid) {
 			setAttributes({uuid: id});
