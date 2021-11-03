@@ -5,7 +5,7 @@ Donate Link: https://philbuchanan.com/donate/
 Tags: accordion, accordions, gutenberg, block, responsive
 Requires at least: 5.8
 Tested up to: 5.8
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -90,6 +90,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 2. Accordion block in the editor
 
 == Changelog ==
+= 1.4.1 =
+* Fixed: Fixed UUID not generating properly in widget editor.
+
 = 1.4.0 =
 * New: Use block API v2 with useBlockProps.
 * Fixed: Registering block with block.json file.
@@ -183,6 +186,9 @@ For bug reports or feature requests or if you'd like to contribute to the plugin
 * All new plugin to support the new WordPress Gutenberg editor.
 
 == Upgrade Notice ==
+= 1.4.1 =
+Fixed accordions not generating UUIDs in the widgets editor, therefore breaking when returning to the widgets editor.
+
 = 1.4.0 =
 Fixed a bunch of compatibility issues with WordPress 5.8 (and the widgets block editor).
 
