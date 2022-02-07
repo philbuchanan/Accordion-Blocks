@@ -9,8 +9,8 @@ import {
 	BlockControls,
 	InspectorControls,
 	RichText,
-	InnerBlocks,
 	useBlockProps,
+	useInnerBlocksProps,
 } from '@wordpress/block-editor';
 import {
 	PanelBody,
@@ -23,7 +23,6 @@ import {
 	Button,
 } from '@wordpress/components';
 import { useEntityProp } from '@wordpress/core-data';
-import { DOWN } from '@wordpress/keycodes';
 
 /**
  * Internal dependencies
@@ -141,6 +140,10 @@ const AccordionItemEdit = ({
 			'c-accordion__item',
 			'js-accordion-item',
 		)
+	});
+
+	const innerBlocksProps = useInnerBlocksProps({
+		className: 'c-accordion__content',
 	});
 
 	return (
@@ -314,9 +317,7 @@ const AccordionItemEdit = ({
 					value={ title }
 					onChange={ value => setAttributes({title: value}) }
 				/>
-				<div className="c-accordion__content">
-					<InnerBlocks />
-				</div>
+				<div { ...innerBlocksProps } />
 			</div>
 		</Fragment>
 	);

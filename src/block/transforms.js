@@ -33,7 +33,7 @@ export default {
 			type: 'block',
 			blocks: ['core/paragraph'],
 			transform: (attributes, innerBlocks) => {
-				var newBlocks = innerBlocks.map(block => createBlock(block.name, block.attributes));
+				let newBlocks = innerBlocks.map(block => createBlock(block.name, block.attributes));
 
 				const level = attributes.titleTag !== 'button' ?
 					parseInt(attributes.titleTag.replace('h', '')) : 2;
