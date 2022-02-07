@@ -57,18 +57,18 @@ const deprecated = [
 				uuid,
 			} = attributes;
 
-			var itemClasses = [
+			let itemClasses = [
 				'c-accordion__item',
 				'js-accordion-item',
 				'no-js',
 			];
 
-			var titleClasses = [
+			let titleClasses = [
 				'c-accordion__title',
 				'js-accordion-controller',
 			];
 
-			var contentStyles = {};
+			let contentStyles = {};
 
 			if (titleTag === 'button') {
 				titleClasses.push('c-accordion__title--button');

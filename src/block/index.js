@@ -3,9 +3,9 @@
  */
 import { registerBlockType } from '@wordpress/blocks';
 import {
-	InnerBlocks,
 	RichText,
 	useBlockProps,
+	useInnerBlocksProps,
 } from '@wordpress/block-editor';
 
 /**
@@ -38,18 +38,18 @@ registerBlockType('pb/accordion-item', {
 			uuid,
 		} = attributes;
 
-		var itemClasses = [
+		let itemClasses = [
 			'c-accordion__item',
 			'js-accordion-item',
 			'no-js',
 		];
 
-		var titleClasses = [
+		let titleClasses = [
 			'c-accordion__title',
 			'js-accordion-controller',
 		];
 
-		var contentStyles = {};
+		let contentStyles = {};
 
 		if (titleTag === 'button') {
 			titleClasses.push('c-accordion__title--button');
@@ -71,6 +71,11 @@ registerBlockType('pb/accordion-item', {
 			'data-scroll-offset': scrollOffset,
 		});
 
+		const innerBlocksProps = useInnerBlocksProps.save({
+			id: 'ac-' + uuid,
+			className: 'c-accordion__content',
+		});
+
 		return (
 			<div { ...blockProps }>
 				<RichText.Content
@@ -80,12 +85,7 @@ registerBlockType('pb/accordion-item', {
 					role="button"
 					value={ title }
 				/>
-				<div
-					id={ 'ac-' + uuid }
-					className="c-accordion__content"
-				>
-					<InnerBlocks.Content />
-				</div>
+				<div { ...innerBlocksProps } />
 			</div>
 		);
 	},
