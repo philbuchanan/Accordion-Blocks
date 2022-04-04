@@ -42,7 +42,5 @@
 		"anchor": true
 	},
 	"editorScript": "file:./build/index.js",
-	"editorStyle": "file:./build/index.css",
-	"script": "pb-accordion-blocks-frontend-script",
-	"style": "pb-accordion-blocks-style"
+	"editorStyle": "file:./build/index.css"
 }
