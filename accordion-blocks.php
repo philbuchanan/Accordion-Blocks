@@ -59,6 +59,8 @@ class PB_Accordion_Blocks {
 		// Add settings page
 		add_action('admin_menu', array($this, 'add_settings_menu'));
 		add_action('admin_init', array($this, 'settings_api_init'));
+
+		add_action('render_block_pb/accordion-item', array($this, 'enqueue_assets_on_render'));
 	}
 
 
@@ -87,28 +89,41 @@ class PB_Accordion_Blocks {
 	 * Enqueue the block's assets for the frontend
 	 */
 	public function enqueue_frontend_assets() {
+		$min = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
+
+		wp_register_script(
+			'pb-accordion-blocks-frontend-script',
+			plugins_url("js/accordion-blocks$min.js", __FILE__),
+			array('jquery'),
+			$this->plugin_version,
+			true
+		);
+
+		wp_register_style(
+			'pb-accordion-blocks-style',
+			plugins_url('build/index.css', __FILE__),
+			array(),
+			$this->plugin_version
+		);
+
 		$load_scripts_globally = $this->should_load_scripts_globally();
 
 		if ($load_scripts_globally || has_block('pb/accordion-item', get_the_ID())) {
-			$min = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) ? '' : '.min';
-
-			wp_enqueue_script(
-				'pb-accordion-blocks-frontend-script',
-				plugins_url("js/accordion-blocks$min.js", __FILE__),
-				array('jquery'),
-				$this->plugin_version,
-				true
-			);
-
-			wp_enqueue_style(
-				'pb-accordion-blocks-style',
-				plugins_url('build/index.css', __FILE__),
-				array(),
-				$this->plugin_version
-			);
+			wp_enqueue_script('pb-accordion-blocks-frontend-script');
+			wp_enqueue_style('pb-accordion-blocks-style');	
 		}
 	}
 
+
+	/**
+	 * Always enqueue the registered assets when the block is rendered
+	 * fixes has_block not working in reusable blocks
+	 */
+	public function enqueue_assets_on_render($output) {
+		wp_enqueue_script('pb-accordion-blocks-frontend-script');
+		wp_enqueue_style('pb-accordion-blocks-style');	
+		return $output;
+	}
 
 
 	/**
