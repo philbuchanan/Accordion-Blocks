@@ -318,7 +318,7 @@
 
 	// Loop through accordion settings objects
 	// Wait for the entire page to load before loading the accordion
-	$(window).on('load', function() {
+	$(document).ready( function() {
 		$('.js-accordion-item').each(function() {
 			$(this).accordionBlockItem({
 				// Set default settings
