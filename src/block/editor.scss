@@ -4,4 +4,8 @@
 			border-bottom: 1px solid var(--wp-admin-theme-color) !important;
 		}
 	}
+
+	.c-accordion__content {
+		display: block !important;
+	}
 }

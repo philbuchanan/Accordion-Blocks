@@ -1,333 +1,274 @@
-(function($) {
-	'use strict';
+/* plain JS slideToggle https://github.com/ericbutler555/plain-js-slidetoggle */
+function _s(o, i, p, l) { void 0 === i && (i = 400), void 0 === l && (l = !1), o.style.overflow = "hidden", l && (o.style.display = "block"); var n, t = window.getComputedStyle(o), s = parseFloat(t.getPropertyValue("height")), a = parseFloat(t.getPropertyValue("padding-top")), r = parseFloat(t.getPropertyValue("padding-bottom")), y = parseFloat(t.getPropertyValue("margin-top")), d = parseFloat(t.getPropertyValue("margin-bottom")), g = s / i, m = a / i, h = r / i, u = y / i, x = d / i; window.requestAnimationFrame(function t(e) { void 0 === n && (n = e); e -= n; l ? (o.style.height = g * e + "px", o.style.paddingTop = m * e + "px", o.style.paddingBottom = h * e + "px", o.style.marginTop = u * e + "px", o.style.marginBottom = x * e + "px") : (o.style.height = s - g * e + "px", o.style.paddingTop = a - m * e + "px", o.style.paddingBottom = r - h * e + "px", o.style.marginTop = y - u * e + "px", o.style.marginBottom = d - x * e + "px"), i <= e ? (o.style.height = "", o.style.paddingTop = "", o.style.paddingBottom = "", o.style.marginTop = "", o.style.marginBottom = "", o.style.overflow = "", l || (o.style.display = "none"), "function" == typeof p && p()) : window.requestAnimationFrame(t) }) } HTMLElement.prototype.slideToggle = function (t, e) { 0 === this.clientHeight ? _s(this, t, e, !0) : _s(this, t, e) }, HTMLElement.prototype.slideUp = function (t, e) { _s(this, t, e) }, HTMLElement.prototype.slideDown = function (t, e) { _s(this, t, e, !0) };
 
-	// Remove the 'no-js' class since JavaScript is enabled
-	$('.js-accordion-item').removeClass('no-js');
-
-
-
-	/**
-	 * Accordion Blocks plugin function
-	 *
-	 * @param object options Plugin settings to override the defaults
-	 */
-	$.fn.accordionBlockItem = function(options) {
-		var settings = $.extend({
+class AccordionItem extends HTMLElement {
+	static get defaultConfig() {
+		return {
 			// Set default settings
 			initiallyOpen: false,
-			autoClose:     true,
-			clickToClose:  true,
-			scroll:        false,
-			scrollOffset:  false,
-		}, options);
+			autoClose: true,
+			clickToClose: true,
+			scroll: false,
+			scrollOffset: false,
+		}
+	}
 
-		var duration = 250;
-		var hashID = window.location.hash.replace('#', '');
+	static get class() {
+		return 'js-accordion-item';
+	}
 
-		var item = {};
+	static get duration() {
+		return 250;
+	}
 
-		item.self       = $(this);
-		item.id         = $(this).attr('id');
-		item.controller = $(this).children('.js-accordion-controller');
-		item.uuid       = getAccordionItemUUID(item.self);
-		item.content    = $('#ac-' + item.uuid);
-		item.accordionGroupItems = [item.uuid];
-		item.accordionAncestorItems = [];
+	/**
+	 * Initialize component
+	 */
+	constructor() {
+		super();
 
+		this.toggle = this.toggle.bind(this);
+		this.onkeydown = this.onkeydown.bind(this);
 
+		this.isOpen = false;
+		this.uuid = parseInt(this.dataset.uuid, 10);
+		this.classList.remove('no-js');
 
-		/**
-		 * Initial setup
-		 * Set the scroll offset, and figure out which items should be open by
-		 * default.
-		 */
-		(function initialSetup() {
-			/**
-			 * Set up some defaults for this controller
-			 * These cannot be set in the blocks `save` function because
-			 * WordPress strips `tabindex` and `aria-controls` attributes from
-			 * saved post content. See `_wp_add_global_attributes` function in
-			 * wp-includes/kses.php for list of allowed attributes.
-			 */
-			item.controller.attr({
-				'tabindex': 0,
-				'aria-controls': 'ac-' + item.uuid,
-			});
+		// Get ancestors and siblings
+		this.ancestors = this.getAncestors();
+		this.siblings = this.getSiblings();
 
-			settings.scrollOffset = Math.floor(parseInt(settings.scrollOffset, 10)) || 0;
+		// Save children elements
+		this.controller = this.querySelector(':scope > #at-' + this.uuid);
+		this.content = this.querySelector(':scope > #ac-' + this.uuid);
 
-			/**
-			 * Add any sibling accordion items to the accordionGroupItems array.
-			 */
-			$.each(item.self.siblings('.js-accordion-item'), function(index, ele) {
-				var uuid = getAccordionItemUUID(ele);
+		// Add Listeners
+		this.controller.addEventListener('click', this.toggle);
+		this.controller.addEventListener('keydown', this.onkeydown);
 
-				item.accordionGroupItems.push(uuid);
-			});
+		// Set basic attributes
+		this.controller.setAttribute('tabindex', 0);
+		this.controller.setAttribute('aria-controls', '#ac-' + this.uuid);
 
-			/**
-			 * Add any parent accordion items to the accordionAncestorItems array.
-			 */
-			$.each(item.self.parents('.js-accordion-item'), function(index, ele) {
-				var uuid = getAccordionItemUUID(ele);
+		// Get the config from the dataset
+		this.getConfig();
 
-				item.accordionAncestorItems.push(uuid);
-			});
+		// Set default attributes
+		this.setAttributes(this.isOpen);
+	}
 
-			// If this item has `initially-open prop` set to true, open it
-			if (settings.initiallyOpen) {
-				/**
-				 * We aren't opening the item here (only setting open attributes)
-				 * because the openItem() function fires the `openAccordionItem`
-				 * event which, if `autoClose` is set, would override the users
-				 * defined initiallyOpen settings.
-				 *
-				 * Only setting open attributes is fine since the item's content
-				 * display (`display: none|block`) is already set by the plugin.
-				 */
-				setOpenItemAttributes();
+	/**
+	 * Go up the DOM tree to retrieve ancestors accordion items (in case of nested items)
+	 * @returns array
+	 */
+	getAncestors() {
+		let current = this;
+		let list = [];
+
+		while (current.parentNode != null && current.parentNode != document.documentElement) {
+			if (current.parentNode.classList.contains(AccordionItem.class)) {
+				list.push(current.parentNode);
 			}
-			// If the hash matches this item, open it
-			else if (item.id === hashID) {
-				/**
-				 * Unlike the `initiallyOpen` case above, if a hash is detected
-				 * that matches one of the accordion items, we probably _want_
-				 * the other items to close so the user can focus on this item.
-				 */
-				openItem();
+			current = current.parentNode;
+		}
+		return list;
+	}
 
-				// Open ancestors if necessary
-				$.each(item.accordionAncestorItems, function(index, uuid) {
-					$(document).trigger('openAncestorAccordionItem', uuid);
-				});
+	/**
+	 * Get immediately adjacent Accordion items
+	 * @returns array
+	 */
+	getSiblings() {
+		const siblings = [];
+		['previous', 'next'].forEach(dir => {
+			let element = this;
+			while (element) {
+				if (element[dir + 'ElementSibling'] && element[dir + 'ElementSibling'].nodeName === 'ACCORDION-ITEM') {
+					element = element[dir + 'ElementSibling'];
+					siblings.push(element);
+				} else {
+					element = null;
+				}
 			}
-			// Otherwise, close the item
-			else {
-				/**
-				 * Don't use closeItem() function call since it animates the
-				 * closing. Instead, we only need to set the closed attributes.
-				 */
-				setCloseItemAttributes();
+		});
+
+		return siblings;
+	}
+
+	/**
+	 * Retrieve item configuration by looking at dataset
+	 * then sets the inital state of the component
+	 */
+	getConfig() {
+		const nodeConfig = {};
+		for (const key in this.dataset) {
+			nodeConfig[key] = this.maybeParse(this.dataset[key]);
+		}
+		this.config = Object.assign({}, AccordionItem.defaultConfig, nodeConfig);
+
+		if (this.config.initiallyOpen || this.isInHash()) {
+			this.isOpen = true;
+			this.checkAncestors();
+		}
+	}
+
+	/**
+	 * Checks if the window hash matches the compenent uuid
+	 * @returns Boolean
+	 */
+	isInHash() {
+		return parseInt(location.hash.replace('#', ''), 10) === this.uuid;
+	}
+
+	/**
+	 * Try parsing a string and returns the result
+	 * @param {string} string
+	 * @returns mixed
+	 */
+	maybeParse(string) {
+		return (() => {
+			try {
+				return JSON.parse(string);
+			} catch (error) {
+				return string;
 			}
 		})();
+	}
 
+	/**
+	 * Handles Escape, Space & Enter key
+	 * @param {KeyboardEvent} event
+	 */
+	onkeydown(event) {
+		if (event.key === 'Escape') {
+			this.close();
+		}
 
-
-		/**
-		 * Default click function
-		 * Called when an accordion controller is clicked.
-		 */
-		function clickHandler() {
-			// Only open the item if item isn't already open
-			if (!item.self.hasClass('is-open')) {
-				// Open clicked item
-				openItem();
+		if (event.code === 'Space' || event.key === 'Enter') {
+			if (this.controller.nodeName !== 'BUTTON') {
+				event.preventDefault();
+				event.stopPropagation();
+				this.toggle();
 			}
-			// If item is open, and click to close is set, close it
-			else if (settings.clickToClose) {
-				closeItem();
-			}
-
-			return false;
 		}
+	}
 
+	/**
+	 * Opens the item
+	 * @param {object} option
+	 */
+	open(option = {}) {
+		const { skipSiblingsCheck } = option;
+		this.isOpen = true;
+		this.content.removeAttribute('hidden');
 
+		this.content.slideDown(AccordionItem.duration, () => {
+			this.setAttributes(true);
+			this.triggerResize();
+		});
 
-		/**
-		 * Get the accordion item UUID for a given accordion item DOM element.
-		 */
-		function getAccordionItemUUID(ele) {
-			return $(ele).children('.js-accordion-controller').attr('id').replace('at-', '');
+		this.scrollToElement();
+		this.checkAncestors();
+
+		if (!skipSiblingsCheck) {
+			this.checkSiblings();
 		}
+	}
 
-
-
-		/**
-		 * Opens an accordion item
-		 * Also handles accessibility attribute settings.
-		 */
-		function openItem() {
-			setOpenItemAttributes();
-
-			// Clear/stop any previous animations before revealing content
-			item.content.clearQueue().stop().slideDown(duration, function() {
-				// Scroll page to the title
-				if (settings.scroll) {
-					// Pause scrolling until other items have closed
-					setTimeout(function() {
-						$('html, body').animate({
-							scrollTop: item.self.offset().top - settings.scrollOffset
-						}, duration);
-					}, duration);
-				}
-			});
-
-			$(document).trigger('openAccordionItem', item);
-		}
-
-
-
-		/**
-		 * Set open item attributes
-		 * Mark accordion item as open and read and set aria attributes.
-		 */
-		function setOpenItemAttributes() {
-			item.self.addClass('is-open is-read');
-			item.controller.attr('aria-expanded', true);
-			item.content.prop('hidden', false);
-		}
-
-
-
-		/**
-		 * Closes an accordion item
-		 * Also handles accessibility attribute settings.
-		 */
-		function closeItem() {
-			// Close the item
-			item.content.slideUp(duration, function() {
-				setCloseItemAttributes();
+	/**
+	 * Closes the item
+	 * @param {boolean} force
+	 */
+	close(force = false) {
+		if ((this.config.clickToClose || force) && this.isOpen) {
+			this.isOpen = false;
+			this.content.slideUp(AccordionItem.duration, () => {
+				this.setAttributes(false);
+				this.triggerResize();
 			});
 		}
+	}
 
+	/**
+	 * Toggles the item
+	 */
+	toggle() {
+		this[this.isOpen ? 'close' : 'open']();
+	}
 
-
-		/**
-		 * Set closed item attributes
-		 * Mark accordion item as closed and set aria attributes.
-		 */
-		function setCloseItemAttributes() {
-			item.self.removeClass('is-open');
-			item.controller.attr('aria-expanded', false);
-			item.content.attr('hidden', true);
-		}
-
-
-
-		/**
-		 * Close all items if auto close is enabled
-		 */
-		function maybeCloseItem() {
-			if (settings.autoClose && item.self.hasClass('is-open')) {
-				closeItem();
-			}
-		}
-
-
-
-		/**
-		 * Add event listeners
-		 */
-		item.controller.on('click', clickHandler);
-
-
-
-		/**
-		 * Listen for other accordion items opening
-		 *
-		 * The `openAccordionItem` event is fired whenever an accordion item is
-		 * opened after initial plugin setup.
-		 */
-		$(document).on('openAccordionItem', function(event, ele) {
-			/**
-			 * Only trigger potential close these conditions are met:
-			 *
-			 * 1. This isn't the item the user just clicked to open.
-			 * 2. This accordion is in the same group of accordions as the one
-			 *    that was just clicked to open.
-			 * 3. This accordion is not an ancestor of the item that was just
-			 *    clicked to open.
-			 *
-			 * This serves two purposes:
-			 *
-			 * 1. It allows nesting of accordions to work.
-			 * 2. It allows users to group accordions to control independently
-			 *    of other groups of accordions.
-			 * 3. It allows child accordions to be opened via hash change
-			 *    without automatically closing the parent accordion, therefore
-			 *    hiding the accordion the user just indicated they wanted open.
-			 */
-			if (
-				ele !== item &&
-				ele.accordionGroupItems.indexOf(item.uuid) > 0 &&
-				ele.accordionAncestorItems.indexOf(item.uuid) === -1
-			) {
-				maybeCloseItem();
-			}
-		});
-
-
-
-		/**
-		 * Listen for ancestor opening requests
-		 *
-		 * The `openAncestorAccordionItem` event is fired whenever a nested
-		 * accordion item is opened, but the ancestors may also need to be
-		 * opened.
-		 */
-		$(document).on('openAncestorAccordionItem', function(event, uuid) {
-			if (uuid === item.uuid) {
-				openItem();
-			}
-		});
-
-
-
-		item.controller.on('keydown', function(event) {
-			var code = event.which;
-
-			if (item.controller.prop('tagName') !== 'BUTTON') {
-				// 13 = Return, 32 = Space
-				if ((code === 13) || (code === 32)) {
-					// Simulate click on the controller
-					$(this).click();
-				}
-			}
-
-			// 27 = Esc
-			if (code === 27) {
-				maybeCloseItem();
-			}
-		});
-
-		// Listen for hash changes (in page jump links for accordions)
-		$(window).on('hashchange', function() {
-			hashID = window.location.hash.replace('#', '');
-
-			// Only open this item if the has matches the ID
-			if (hashID === item.id) {
-				var ele = $('#' + hashID);
-
-				// If there is a hash and the hash is on an accordion item
-				if (ele.length && ele.hasClass('js-accordion-item')) {
-					// Open clicked item
-					openItem();
-
-					// Open ancestors if necessary
-					$.each(item.accordionAncestorItems, function(index, uuid) {
-						$(document).trigger('openAncestorAccordionItem', uuid);
+	/**
+	 * Scroll the window to the item's position
+	 */
+	scrollToElement() {
+		if (this.config.scroll) {
+			setTimeout(() => {
+				requestIdleCallback(() => {
+					const currentPos = this.getBoundingClientRect().top;
+					scrollTo({
+						top: (currentPos + document.documentElement.scrollTop) - this.config.scrollOffset,
+						behavior: 'smooth'
 					});
-				}
+				});
+			}, AccordionItem.duration + 150);
+		}
+	}
+
+	/**
+	 * Set attributes and classes according to the current state
+	 * @param {boolean} open
+	 */
+	setAttributes(open = true) {
+		if (open) {
+			this.classList.add('is-read');
+		}
+		this.classList.toggle('is-open');
+		this.controller.setAttribute('aria-expanded', this.isOpen);
+		open ? this.content.removeAttribute('hidden') : this.content.setAttribute('hidden', 'until-found');
+		this.content.style = null;
+	}
+
+	/**
+	 * Automatically opens ancestors when opening the item
+	 */
+	checkAncestors() {
+		this.ancestors.forEach(element => {
+			if (!element.isOpen) {
+				element.open({ skipSiblingsCheck: true });
 			}
 		});
+	}
 
-		return this;
-	};
-
-
-
-	// Loop through accordion settings objects
-	// Wait for the entire page to load before loading the accordion
-	$(window).on('load', function() {
-		$('.js-accordion-item').each(function() {
-			$(this).accordionBlockItem({
-				// Set default settings
-				initiallyOpen: $(this).data('initially-open'),
-				autoClose:     $(this).data('auto-close'),
-				clickToClose:  $(this).data('click-to-close'),
-				scroll:        $(this).data('scroll'),
-				scrollOffset:  $(this).data('scroll-offset'),
-			});
+	/**
+	 * Automatically closes siblings when opening then item
+	 */
+	checkSiblings() {
+		this.siblings.forEach(element => {
+			if (element.config.autoClose) {
+				element.close(true);
+			}
 		});
+	}
+
+	/**
+	 * Dispatch a resize event after opening or closing the item
+	 */
+	triggerResize() {
+		dispatchEvent(new Event('resize'));
+	}
+}
+
+/**
+ * Register custom elements & hashchange listener
+ */
+if (typeof customElements !== 'undefined') {
+	customElements.define('accordion-item', AccordionItem);
+
+	addEventListener('hashchange', () => {
+		const hash = location.hash.replace('#', '');
+		const match = document.querySelector(`[data-uuid="${hash}"]`);
+
+		if (match && match instanceof AccordionItem) {
+			match.open();
+		}
 	});
-}(jQuery));
+}
