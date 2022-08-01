@@ -287,6 +287,7 @@ if (typeof customElements !== 'undefined') {
 	customElements.define('accordion-item', AccordionItem);
 
 	const items = document.querySelectorAll('accordion-item');
+	const eventParams = { capture: false };
 	let resizeDebounce;
 
 	addEventListener('hashchange', () => {
@@ -296,9 +297,7 @@ if (typeof customElements !== 'undefined') {
 		if (match && match instanceof AccordionItem) {
 			match.open();
 		}
-	}, {
-		capture: false
-	});
+	}, eventParams);
 
 	addEventListener('resize', (event) => {
 		if (!event.isTrusted) return;
@@ -307,7 +306,5 @@ if (typeof customElements !== 'undefined') {
 		resizeDebounce = setTimeout(() => {
 			items.forEach(item => item.maybeOpen());
 		}, 150);
-	}, {
-		capture: false
-	});
+	}, eventParams);
 }

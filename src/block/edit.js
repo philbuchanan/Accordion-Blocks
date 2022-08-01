@@ -71,6 +71,18 @@ const AccordionItemEdit = ({
 			? select('core/editor').getCurrentPostId() : 0;
 	});
 
+	const formatTypes = useSelect((select) => {
+		const store = select('core/rich-text');
+		let types = [];
+
+		if (store) {
+			types = store.getFormatTypes().filter(i => i.name !== 'core/link');
+			types = types.map(i => i.name);
+		}
+
+		return types;
+	});
+
 	useEffect(() => {
 		const id = Number(`${entityId}${instanceId}`);
 
@@ -321,10 +333,7 @@ const AccordionItemEdit = ({
 						'c-accordion__title--button': titleTag === 'button'
 					})}
 					tagName={titleTag === 'button' ? 'div' : titleTag}
-					allowedFormats={[
-						'core/bold',
-						'core/italic',
-					]}
+					allowedFormats={formatTypes}
 					placeholder={__('Accordion item title…', 'accordion-blocks')}
 					value={title}
 					onChange={value => setAttributes({ title: value })}
