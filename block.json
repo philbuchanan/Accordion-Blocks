@@ -14,6 +14,10 @@
 			"type": "boolean",
 			"default": false
 		},
+		"openBreakpoint": {
+			"type": "number",
+			"default": 0
+		},
 		"clickToClose": {
 			"type": "boolean",
 			"default": true

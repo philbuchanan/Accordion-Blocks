@@ -6,6 +6,7 @@ class AccordionItem extends HTMLElement {
 		return {
 			// Set default settings
 			initiallyOpen: false,
+			openBreakpoint: 0,
 			autoClose: true,
 			clickToClose: true,
 			scroll: false,
@@ -106,7 +107,9 @@ class AccordionItem extends HTMLElement {
 		}
 		this.config = Object.assign({}, AccordionItem.defaultConfig, nodeConfig);
 
-		if (this.config.initiallyOpen || this.isInHash()) {
+		const shouldOpen = this.config.initiallyOpen && window.innerWidth >= this.config.openBreakpoint;
+
+		if (shouldOpen || this.isInHash()) {
 			this.isOpen = true;
 			this.checkAncestors();
 		}
@@ -158,7 +161,7 @@ class AccordionItem extends HTMLElement {
 	 * @param {object} option
 	 */
 	open(option = {}) {
-		const { skipSiblingsCheck } = option;
+		const { skipSiblingsCheck, skipScroll } = option;
 		this.isOpen = true;
 		this.content.removeAttribute('hidden');
 
@@ -167,11 +170,20 @@ class AccordionItem extends HTMLElement {
 			this.triggerResize();
 		});
 
-		this.scrollToElement();
+		if (!skipScroll) {
+			this.scrollToElement();
+		}
+
 		this.checkAncestors();
 
 		if (!skipSiblingsCheck) {
 			this.checkSiblings();
+		}
+	}
+
+	maybeOpen() {
+		if (!this.isOpen && !this.isRead && this.config.initiallyOpen && window.innerWidth >= this.config.openBreakpoint) {
+			this.open({ skipSiblingsCheck: true, skipScroll: true });
 		}
 	}
 
@@ -219,9 +231,12 @@ class AccordionItem extends HTMLElement {
 	 */
 	setAttributes(open = true) {
 		if (open) {
-			this.classList.add('is-read');
+			this.classList.add('is-read', 'is-open');
+			this.isRead = true;
+		} else {
+			this.classList.remove('is-open');
 		}
-		this.classList.toggle('is-open');
+
 		this.controller.setAttribute('aria-expanded', this.isOpen);
 		open ? this.content.removeAttribute('hidden') : this.content.setAttribute('hidden', 'until-found');
 		this.content.style = null;
@@ -253,7 +268,9 @@ class AccordionItem extends HTMLElement {
 	 * Dispatch a resize event after opening or closing the item
 	 */
 	triggerResize() {
-		dispatchEvent(new Event('resize'));
+		const event = new Event('resize');
+		event.isAfterToggle = true;
+		dispatchEvent(event);
 	}
 }
 
@@ -263,6 +280,9 @@ class AccordionItem extends HTMLElement {
 if (typeof customElements !== 'undefined') {
 	customElements.define('accordion-item', AccordionItem);
 
+	const items = document.querySelectorAll('accordion-item');
+	let resizeDebounce;
+
 	addEventListener('hashchange', () => {
 		const hash = location.hash.replace('#', '');
 		const match = document.querySelector(`[data-uuid="${hash}"]`);
@@ -270,5 +290,18 @@ if (typeof customElements !== 'undefined') {
 		if (match && match instanceof AccordionItem) {
 			match.open();
 		}
+	}, {
+		capture: false
+	});
+
+	addEventListener('resize', (event) => {
+		if (!event.isTrusted) return;
+
+		clearTimeout(resizeDebounce);
+		resizeDebounce = setTimeout(() => {
+			items.forEach(item => item.maybeOpen());
+		}, 150);
+	}, {
+		capture: false
 	});
 }

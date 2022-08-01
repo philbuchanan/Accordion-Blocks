@@ -7,6 +7,7 @@ import apiFetch from '@wordpress/api-fetch';
 const initialState = {
 	defaults: {
 		initiallyOpen: false,
+		openBreakpoint: 0,
 		clickToClose: true,
 		autoClose: true,
 		scroll: false,
@@ -48,8 +49,8 @@ const store = createReduxStore('accordion-blocks', {
 					data: action.defaults,
 					method: 'POST',
 				})
-				.then((response) => {})
-				.catch((error) => {});
+					.then((response) => { })
+					.catch((error) => { });
 
 				return Object.assign({}, state, {
 					defaults: action.defaults

@@ -151,6 +151,9 @@ class PB_Accordion_Blocks {
 							'initiallyOpen'  => array(
 								'type' => 'boolean',
 							),
+							'openBreakpoint'  => array(
+								'type' => 'number',
+							),
 							'clickToClose' => array(
 								'type' => 'boolean',
 							),
@@ -168,6 +171,7 @@ class PB_Accordion_Blocks {
 				),
 				'default' => array(
 					'initiallyOpen' => false,
+					'openBreakpoint' => 0,
 					'clickToClose'  => true,
 					'autoClose'     => true,
 					'scroll'        => false,
@@ -238,6 +242,7 @@ class PB_Accordion_Blocks {
 
 		$new_defaults = (object) array(
 			'initiallyOpen' => isset($new_defaults->initiallyOpen) ? $new_defaults->initiallyOpen : $old_defaults->initiallyOpen,
+			'initiallyOpen' => isset($new_defaults->openBreakpoint) ? $new_defaults->openBreakpoint : $old_defaults->openBreakpoint,
 			'clickToClose'  => isset($new_defaults->clickToClose)  ? $new_defaults->clickToClose  : $old_defaults->clickToClose,
 			'autoClose'     => isset($new_defaults->autoClose)     ? $new_defaults->autoClose     : $old_defaults->autoClose,
 			'scroll'        => isset($new_defaults->scroll)        ? $new_defaults->scroll        : $old_defaults->scroll,

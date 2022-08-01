@@ -13,11 +13,13 @@ import {
 	useInnerBlocksProps,
 } from '@wordpress/block-editor';
 import {
+	BaseControl,
 	PanelBody,
 	ToolbarGroup,
 	ToggleControl,
 	RangeControl,
 	Button,
+	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
 
 /**
@@ -34,6 +36,7 @@ const AccordionItemEdit = ({
 	const {
 		title,
 		initiallyOpen,
+		openBreakpoint,
 		clickToClose,
 		autoClose,
 		titleTag,
@@ -98,6 +101,7 @@ const AccordionItemEdit = ({
 	const settingsAreDefaults =
 		!(defaults === undefined || defaults === null) &&
 		initiallyOpen === defaults.initiallyOpen &&
+		openBreakpoint === defaults.openBreakpoint &&
 		clickToClose === defaults.clickToClose &&
 		autoClose === defaults.autoClose &&
 		scroll === defaults.scroll &&
@@ -111,6 +115,7 @@ const AccordionItemEdit = ({
 		if (isNew && !settingsAreDefaults) {
 			setAttributes({
 				initiallyOpen: defaults.initiallyOpen,
+				openBreakpoint: defaults.openBreakpoint,
 				clickToClose: defaults.clickToClose,
 				autoClose: defaults.autoClose,
 				scroll: defaults.scroll,
@@ -206,8 +211,19 @@ const AccordionItemEdit = ({
 							__('This accordion item will be closed when the page loads.', 'accordion-blocks')
 						}
 						checked={initiallyOpen}
-						onChange={value => setAttributes({ initiallyOpen: value })}
+						onChange={value => setAttributes({ initiallyOpen: value, openBreakpoint: value ? openBreakpoint : 0 })}
 					/>
+					{initiallyOpen && (
+						<BaseControl
+							label={__('Breakpoint', 'accordion-blocks')}
+							help={__('Only open this accordion by default on devices larger than a given width.', 'accordion-blocks')}
+						>
+							<NumberControl
+								value={openBreakpoint}
+								onChange={value => setAttributes({ openBreakpoint: parseInt(value, 10) })}
+							/>
+						</BaseControl>
+					)}
 					<ToggleControl
 						label={__('Click to Close', 'accordion-blocks')}
 						help={clickToClose ?
@@ -282,6 +298,7 @@ const AccordionItemEdit = ({
 									onClick={() => {
 										setAttributes({
 											initiallyOpen: defaults.initiallyOpen,
+											openBreakpoint: defaults.openBreakpoint,
 											clickToClose: defaults.clickToClose,
 											autoClose: defaults.autoClose,
 											scroll: defaults.scroll,

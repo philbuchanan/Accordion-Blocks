@@ -32,6 +32,7 @@ registerBlockType('pb/accordion-item', {
 			className,
 			title,
 			initiallyOpen,
+			openBreakpoint,
 			clickToClose,
 			autoClose,
 			titleTag,
@@ -57,6 +58,7 @@ registerBlockType('pb/accordion-item', {
 		const blockProps = useBlockProps.save({
 			className: [...itemClasses, className].join(' '),
 			'data-initially-open': initiallyOpen,
+			'data-open-breakpoint': openBreakpoint,
 			'data-click-to-close': clickToClose,
 			'data-auto-close': autoClose,
 			'data-scroll': scroll,
