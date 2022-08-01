@@ -161,40 +161,46 @@ class AccordionItem extends HTMLElement {
 	 * @param {object} option
 	 */
 	open(option = {}) {
-		const { skipSiblingsCheck, skipScroll } = option;
+		const { noSiblingsCheck, noScroll, noAncestorsCheck, noChecksAndScroll, noAnim } = option;
 		this.isOpen = true;
 		this.content.removeAttribute('hidden');
 
-		this.content.slideDown(AccordionItem.duration, () => {
+		this.content.slideDown(noAnim ? 0 : AccordionItem.duration, () => {
 			this.setAttributes(true);
 			this.triggerResize();
 		});
 
-		if (!skipScroll) {
-			this.scrollToElement();
+		if (!noChecksAndScroll) {
+			if (!noScroll) {
+				this.scrollToElement();
+			}
+
+			if (!noAncestorsCheck) {
+				this.checkAncestors();
+			}
+
+			if (!noSiblingsCheck) {
+				this.checkSiblings();
+			}
 		}
 
-		this.checkAncestors();
-
-		if (!skipSiblingsCheck) {
-			this.checkSiblings();
-		}
 	}
 
 	maybeOpen() {
 		if (!this.isOpen && !this.isRead && this.config.initiallyOpen && window.innerWidth >= this.config.openBreakpoint) {
-			this.open({ skipSiblingsCheck: true, skipScroll: true });
+			this.open({ noSiblingsCheck: true, noScroll: true });
 		}
 	}
 
 	/**
 	 * Closes the item
-	 * @param {boolean} force
+	 * @param {object} options
 	 */
-	close(force = false) {
+	close(options = {}) {
+		const { noAnim, force } = options;
 		if ((this.config.clickToClose || force) && this.isOpen) {
 			this.isOpen = false;
-			this.content.slideUp(AccordionItem.duration, () => {
+			this.content.slideUp(noAnim ? 0 : AccordionItem.duration, () => {
 				this.setAttributes(false);
 				this.triggerResize();
 			});
@@ -248,7 +254,7 @@ class AccordionItem extends HTMLElement {
 	checkAncestors() {
 		this.ancestors.forEach(element => {
 			if (!element.isOpen) {
-				element.open({ skipSiblingsCheck: true });
+				element.open({ noSiblingsCheck: true });
 			}
 		});
 	}
@@ -259,7 +265,7 @@ class AccordionItem extends HTMLElement {
 	checkSiblings() {
 		this.siblings.forEach(element => {
 			if (element.config.autoClose) {
-				element.close(true);
+				element.close({ force: true });
 			}
 		});
 	}
