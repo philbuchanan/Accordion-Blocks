@@ -76,7 +76,7 @@ $color-open-icon: #777;
 	}
 }
 
-.c-accordion__content[hidden] {
+.c-accordion__content[hidden="until-found"] {
 	display: revert;
 }
 
