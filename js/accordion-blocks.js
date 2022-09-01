@@ -244,7 +244,7 @@ class AccordionItem extends HTMLElement {
 		}
 
 		this.controller.setAttribute('aria-expanded', this.isOpen);
-		open ? this.content.removeAttribute('hidden') : this.content.setAttribute('hidden', 'until-found');
+		open ? this.content.removeAttribute('hidden') : this.content.setAttribute('hidden', !!window.chrome ? 'until-found' : '');
 		this.content.style = null;
 	}
 
