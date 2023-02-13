@@ -44,7 +44,20 @@
 	},
 	"supports": {
 		"anchor": true,
-		"align": true
+		"align": true,
+		"ariaLabel": true,
+		"className": true,
+		"spacing": {
+			"margin": true,
+			"padding": true,
+			"blockGap": true
+		},
+		"color": {
+			"gradients": true,
+			"background": true,
+			"text": true,
+			"link": true
+		}
 	},
 	"editorScript": "file:./build/index.js",
 	"editorStyle": "file:./build/index.css"
