@@ -307,4 +307,13 @@ if (typeof customElements !== 'undefined') {
 			items.forEach(item => item.maybeOpen());
 		}, 150);
 	}, eventParams);
+
+	// Open all items on cmd/ctrl F on browser without until-found support
+	if (!window.chrome) {
+		addEventListener('keydown', (event) => {
+			if ((event.ctrlKey || event.metaKey) && event.code === 'KeyF') {
+				items.forEach(item => item.open());
+			}
+		});
+	}
 }
