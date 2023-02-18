@@ -1,6 +1,6 @@
 {
 	"apiVersion": "2",
-	"version": "1.6.1",
+	"version": "1.7.0",
 	"name": "pb/accordion-item",
 	"title": "Accordion Item",
 	"category": "text",
