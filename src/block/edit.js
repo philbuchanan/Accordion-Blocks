@@ -13,33 +13,30 @@ import {
 	useInnerBlocksProps,
 } from '@wordpress/block-editor';
 import {
+	BaseControl,
 	PanelBody,
-	Toolbar,
 	ToolbarGroup,
-	ToolbarButton,
-	Dropdown,
 	ToggleControl,
 	RangeControl,
 	Button,
+	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
-import { useEntityProp } from '@wordpress/core-data';
 
 /**
  * Internal dependencies
  */
 import HtmlTagIcon from './html-tag-icon';
-import classnames from '../utils/classnames';
+import classNames from 'classnames';
 
 const AccordionItemEdit = ({
-	className,
 	attributes,
 	setAttributes,
 	clientId,
-	isSelected,
 }) => {
 	const {
 		title,
 		initiallyOpen,
+		openBreakpoint,
 		clickToClose,
 		autoClose,
 		titleTag,
@@ -50,16 +47,6 @@ const AccordionItemEdit = ({
 
 	// An accordion item is considered new if it doesn't have a UUID yet
 	const [isNew, setIsNew] = useState(!uuid);
-
-	const isParentOfSelectedBlock = useSelect((select) => {
-		return select('core/block-editor').hasSelectedInnerBlock(clientId, true);
-	});
-
-	const isAccordionItemSelected = useSelect((select) => {
-		const block = select('core/block-editor').getSelectedBlock();
-
-		return block ? block.name === 'pb/accordion-item' : false;
-	});
 
 	/**
 	 * UUID is generated as a combination of the post ID and this block's
@@ -84,11 +71,23 @@ const AccordionItemEdit = ({
 			? select('core/editor').getCurrentPostId() : 0;
 	});
 
+	const formatTypes = useSelect((select) => {
+		const store = select('core/rich-text');
+		let types = [];
+
+		if (store) {
+			types = store.getFormatTypes().filter(i => i.name !== 'core/link');
+			types = types.map(i => i.name);
+		}
+
+		return types;
+	});
+
 	useEffect(() => {
-		const id = Number(`${ entityId }${ instanceId }`);
+		const id = Number(`${entityId}${instanceId}`);
 
 		if (id !== uuid) {
-			setAttributes({uuid: id});
+			setAttributes({ uuid: id });
 		}
 	}, [instanceId]);
 
@@ -114,6 +113,7 @@ const AccordionItemEdit = ({
 	const settingsAreDefaults =
 		!(defaults === undefined || defaults === null) &&
 		initiallyOpen === defaults.initiallyOpen &&
+		openBreakpoint === defaults.openBreakpoint &&
 		clickToClose === defaults.clickToClose &&
 		autoClose === defaults.autoClose &&
 		scroll === defaults.scroll &&
@@ -127,6 +127,7 @@ const AccordionItemEdit = ({
 		if (isNew && !settingsAreDefaults) {
 			setAttributes({
 				initiallyOpen: defaults.initiallyOpen,
+				openBreakpoint: defaults.openBreakpoint,
 				clickToClose: defaults.clickToClose,
 				autoClose: defaults.autoClose,
 				scroll: defaults.scroll,
@@ -136,23 +137,32 @@ const AccordionItemEdit = ({
 	}, [defaults]);
 
 	const blockProps = useBlockProps({
-		className: classnames(
+		className: classNames(
 			'c-accordion__item',
 			'js-accordion-item',
 		)
 	});
 
-	const innerBlocksProps = useInnerBlocksProps({
+	blockProps.class = blockProps.className;
+	blockProps.className = null;
+
+	const contentProps = {
+		id: 'ac-' + uuid,
 		className: 'c-accordion__content',
+		'hidden': initiallyOpen ? undefined : 'until-found'
+	};
+
+	const innerBlocksProps = useInnerBlocksProps({
+		className: 'c-accordion__content-wrapper'
 	});
 
 	return (
 		<Fragment>
 			<BlockControls group="block">
 				<ToolbarGroup
-					icon={ <HtmlTagIcon tag={ titleTag } /> }
-					label={ __('Change accordion title tag', 'pb') }
-					controls={ [
+					icon={<HtmlTagIcon tag={titleTag} />}
+					label={__('Change accordion title tag', 'pb')}
+					controls={[
 						{
 							tag: 'h1',
 							label: __('Heading 1', 'accordion-blocks'),
@@ -184,85 +194,96 @@ const AccordionItemEdit = ({
 					].map((control) => {
 						return {
 							name: control.tag,
-							icon: <HtmlTagIcon tag={ control.tag } />,
+							icon: <HtmlTagIcon tag={control.tag} />,
 							title: control.label,
 							isActive: titleTag === control.tag,
-							onClick: () => setAttributes({'titleTag': control.tag}),
+							onClick: () => setAttributes({ 'titleTag': control.tag }),
 						}
-					}) }
-					isCollapsed={ true }
+					})}
+					isCollapsed={true}
 				/>
 			</BlockControls>
 			<InspectorControls>
-				{ isNestedAccordion && (
+				{isNestedAccordion && (
 					<div
 						className="components-notice is-warning"
-						style={ {
+						style={{
 							margin: '0',
 							borderTop: '1px solid #f0f0f0',
-						} }
+						}}
 					>
-						{ __('This accordion item is nested inside another accordion item. While this will work, it may not be what you intended.', 'accordion-blocks') }
+						{__('This accordion item is nested inside another accordion item. While this will work, it may not be what you intended.', 'accordion-blocks')}
 					</div>
-				) }
-				<PanelBody title={ __('Accordion Item Settings', 'accordion-blocks') }>
+				)}
+				<PanelBody title={__('Accordion Item Settings', 'accordion-blocks')}>
 					<ToggleControl
-						label={ __('Open By Default', 'accordion-blocks') }
-						help={ initiallyOpen ?
+						label={__('Open By Default', 'accordion-blocks')}
+						help={initiallyOpen ?
 							__('This accordion item will be open when the page loads.', 'accordion-blocks') :
 							__('This accordion item will be closed when the page loads.', 'accordion-blocks')
 						}
-						checked={ initiallyOpen }
-						onChange={ value => setAttributes({initiallyOpen: value}) }
+						checked={initiallyOpen}
+						onChange={value => setAttributes({ initiallyOpen: value, openBreakpoint: value ? openBreakpoint : 0 })}
 					/>
+					{initiallyOpen && (
+						<BaseControl
+							label={__('Breakpoint', 'accordion-blocks')}
+							help={__('Only open this accordion by default on devices larger than a given width.', 'accordion-blocks')}
+						>
+							<NumberControl
+								value={openBreakpoint}
+								onChange={value => setAttributes({ openBreakpoint: parseInt(value, 10) })}
+							/>
+						</BaseControl>
+					)}
 					<ToggleControl
-						label={ __('Click to Close', 'accordion-blocks') }
-						help={ clickToClose ?
+						label={__('Click to Close', 'accordion-blocks')}
+						help={clickToClose ?
 							__('When open, this accordion item title can be clicked again to close it.', 'accordion-blocks') :
 							__('Once opened, this accordion item cannot be closed by clicking the title.', 'accordion-blocks')
 						}
-						checked={ clickToClose }
-						onChange={ value => setAttributes({clickToClose: value}) }
+						checked={clickToClose}
+						onChange={value => setAttributes({ clickToClose: value })}
 					/>
 					<ToggleControl
-						label={ __('Auto Close', 'accordion-blocks') }
-						help={ autoClose ?
+						label={__('Auto Close', 'accordion-blocks')}
+						help={autoClose ?
 							__('This accordion item will close when opening another item.', 'accordion-blocks') :
 							__('This accordion item will remain open when opening another item.', 'accordion-blocks')
 						}
-						checked={ autoClose }
-						onChange={ value => setAttributes({autoClose: value}) }
+						checked={autoClose}
+						onChange={value => setAttributes({ autoClose: value })}
 					/>
 					<ToggleControl
-						label={ __('Scroll to Accordion Item', 'accordion-blocks') }
-						help={ scroll ?
+						label={__('Scroll to Accordion Item', 'accordion-blocks')}
+						help={scroll ?
 							__('The page will scroll to the accordion item title when it is opened.', 'accordion-blocks') :
 							__('The page will not scroll when opening accordion items.', 'accordion-blocks')
 						}
-						checked={ scroll }
-						onChange={ value => setAttributes({
+						checked={scroll}
+						onChange={value => setAttributes({
 							scroll: value,
 							scrollOffset: 0,
-						}) }
+						})}
 					/>
-					{ !!scroll && (
+					{!!scroll && (
 						<RangeControl
-							label={ __('Scroll Pixel Offset', 'accordion-blocks') }
-							value={ scrollOffset }
-							onChange={ value => setAttributes({scrollOffset: parseInt(value, 10) ? parseInt(value, 10) : 0}) }
-							min={ 0 }
-							max={ 1000 }
-							help={ __('A pixel offset for the final scroll position.', 'accordion-blocks') }
+							label={__('Scroll Pixel Offset', 'accordion-blocks')}
+							value={scrollOffset}
+							onChange={value => setAttributes({ scrollOffset: parseInt(value, 10) ? parseInt(value, 10) : 0 })}
+							min={0}
+							max={1000}
+							help={__('A pixel offset for the final scroll position.', 'accordion-blocks')}
 						/>
-					) }
-					{ !settingsAreDefaults && (
+					)}
+					{!settingsAreDefaults && (
 						<Fragment>
-							<hr/>
-							{ userCanSetDefaults && (
+							<hr />
+							{userCanSetDefaults && (
 								<Fragment>
 									<Button
-										isLink={ true }
-										onClick={ () => {
+										isLink={true}
+										onClick={() => {
 											dispatch('accordion-blocks').saveDefaultSettings({
 												initiallyOpen: initiallyOpen,
 												clickToClose: clickToClose,
@@ -270,55 +291,57 @@ const AccordionItemEdit = ({
 												scroll: scroll,
 												scrollOffset: scrollOffset,
 											});
-										} }
+										}}
 									>
-										{ __('Make These Settings the Defaults', 'accordion-blocks') }
+										{__('Make These Settings the Defaults', 'accordion-blocks')}
 									</Button>
-									<p style={ {
+									<p style={{
 										fontStyle: 'italic',
 										marginTop: '7px',
-									} }>
-										{ __('Default settings only apply when creating new accordion items.', 'accordion-blocks') }
+									}}>
+										{__('Default settings only apply when creating new accordion items.', 'accordion-blocks')}
 									</p>
 								</Fragment>
-							) }
+							)}
 							<p>
 								<Button
-									isLink={ true }
-									isDestructive={ true }
-									onClick={ () => {
+									isLink={true}
+									isDestructive={true}
+									onClick={() => {
 										setAttributes({
 											initiallyOpen: defaults.initiallyOpen,
+											openBreakpoint: defaults.openBreakpoint,
 											clickToClose: defaults.clickToClose,
 											autoClose: defaults.autoClose,
 											scroll: defaults.scroll,
 											scrollOffset: defaults.scrollOffset,
 										});
-									} }
+									}}
 								>
-									{ __('Reset These Settings to Defaults', 'accordion-blocks') }
+									{__('Reset These Settings to Defaults', 'accordion-blocks')}
 								</Button>
 							</p>
 						</Fragment>
-					) }
+					)}
 				</PanelBody>
 			</InspectorControls>
-			<div { ...blockProps }>
+			<accordion-item {...blockProps}>
 				<RichText
-					className={ classnames('c-accordion__title', {
-						'c-accordion__title--button': titleTag === 'button',
-					}) }
-					tagName={ titleTag === 'button' ? 'div' : titleTag }
-					allowedFormats={ [
-						'core/bold',
-						'core/italic',
-					] }
-					placeholder={ __('Accordion item title…', 'accordion-blocks') }
-					value={ title }
-					onChange={ value => setAttributes({title: value}) }
+					id={'at-' + uuid}
+					role='button'
+					className={classNames('c-accordion__title', 'js-accordion-controller', {
+						'c-accordion__title--button': titleTag === 'button'
+					})}
+					tagName={titleTag === 'button' ? 'div' : titleTag}
+					allowedFormats={formatTypes}
+					placeholder={__('Accordion item title…', 'accordion-blocks')}
+					value={title}
+					onChange={value => setAttributes({ title: value })}
 				/>
-				<div { ...innerBlocksProps } />
-			</div>
+				<div {...contentProps}>
+					<div {...innerBlocksProps}></div>
+				</div>
+			</accordion-item>
 		</Fragment>
 	);
 };

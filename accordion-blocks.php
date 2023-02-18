@@ -4,7 +4,7 @@
  * Plugin Name: Accordion Blocks
  * Plugin URI: https://github.com/philbuchanan/Accordion-Blocks
  * Description: Gutenberg blocks for creating responsive accordion drop-downs.
- * Version: 1.5.0
+ * Version: 1.7.0
  * Requires at least: 5.9
  * Tested up to: 5.9
  * Requires PHP: 7.3
@@ -94,7 +94,7 @@ class PB_Accordion_Blocks {
 		wp_register_script(
 			'pb-accordion-blocks-frontend-script',
 			plugins_url("js/accordion-blocks$min.js", __FILE__),
-			array('jquery'),
+			null,
 			$this->plugin_version,
 			true
 		);
@@ -110,7 +110,7 @@ class PB_Accordion_Blocks {
 
 		if ($load_scripts_globally || has_block('pb/accordion-item', get_the_ID())) {
 			wp_enqueue_script('pb-accordion-blocks-frontend-script');
-			wp_enqueue_style('pb-accordion-blocks-style');	
+			wp_enqueue_style('pb-accordion-blocks-style');
 		}
 	}
 
@@ -121,7 +121,7 @@ class PB_Accordion_Blocks {
 	 */
 	public function enqueue_assets_on_render($output) {
 		wp_enqueue_script('pb-accordion-blocks-frontend-script');
-		wp_enqueue_style('pb-accordion-blocks-style');	
+		wp_enqueue_style('pb-accordion-blocks-style');
 		return $output;
 	}
 
@@ -151,6 +151,9 @@ class PB_Accordion_Blocks {
 							'initiallyOpen'  => array(
 								'type' => 'boolean',
 							),
+							'openBreakpoint'  => array(
+								'type' => 'number',
+							),
 							'clickToClose' => array(
 								'type' => 'boolean',
 							),
@@ -168,6 +171,7 @@ class PB_Accordion_Blocks {
 				),
 				'default' => array(
 					'initiallyOpen' => false,
+					'openBreakpoint' => 0,
 					'clickToClose'  => true,
 					'autoClose'     => true,
 					'scroll'        => false,
@@ -238,6 +242,7 @@ class PB_Accordion_Blocks {
 
 		$new_defaults = (object) array(
 			'initiallyOpen' => isset($new_defaults->initiallyOpen) ? $new_defaults->initiallyOpen : $old_defaults->initiallyOpen,
+			'initiallyOpen' => isset($new_defaults->openBreakpoint) ? $new_defaults->openBreakpoint : $old_defaults->openBreakpoint,
 			'clickToClose'  => isset($new_defaults->clickToClose)  ? $new_defaults->clickToClose  : $old_defaults->clickToClose,
 			'autoClose'     => isset($new_defaults->autoClose)     ? $new_defaults->autoClose     : $old_defaults->autoClose,
 			'scroll'        => isset($new_defaults->scroll)        ? $new_defaults->scroll        : $old_defaults->scroll,

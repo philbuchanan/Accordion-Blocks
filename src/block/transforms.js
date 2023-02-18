@@ -35,8 +35,7 @@ export default {
 			transform: (attributes, innerBlocks) => {
 				let newBlocks = innerBlocks.map(block => createBlock(block.name, block.attributes));
 
-				const level = attributes.titleTag !== 'button' ?
-					parseInt(attributes.titleTag.replace('h', '')) : 2;
+				const level = parseInt(attributes.titleTag.replace('h', ''));
 
 				newBlocks.splice(0, 0, createBlock('core/heading', {
 					content:   attributes.title,

@@ -15,6 +15,10 @@ const deprecated = [
 				type: 'boolean',
 				default: false,
 			},
+			openBreakpoint: {
+				type: 'number',
+				default: 0,
+			},
 			clickToClose: {
 				type: 'boolean',
 				default: true,
@@ -49,6 +53,7 @@ const deprecated = [
 				className,
 				title,
 				initiallyOpen,
+				openBreakpoint,
 				clickToClose,
 				autoClose,
 				titleTag,
@@ -83,26 +88,27 @@ const deprecated = [
 
 			return (
 				<div
-					className={ [...itemClasses, className].join(' ') }
-					data-initially-open={ initiallyOpen }
-					data-click-to-close={ clickToClose }
-					data-auto-close={ autoClose }
-					data-scroll={ scroll }
-					data-scroll-offset={ scrollOffset }
+					className={[...itemClasses, className].join(' ')}
+					data-initially-open={initiallyOpen}
+					data-open-breakpoint={openBreakpoint}
+					data-click-to-close={clickToClose}
+					data-auto-close={autoClose}
+					data-scroll={scroll}
+					data-scroll-offset={scrollOffset}
 				>
 					<RichText.Content
-						id={ 'at-' + uuid }
-						className={ titleClasses.join(' ') }
-						tagName={ titleTag }
-						tabIndex={ 0 }
+						id={'at-' + uuid}
+						className={titleClasses.join(' ')}
+						tagName={titleTag}
+						tabIndex={0}
 						role="button"
-						aria-controls={ 'ac-' + uuid }
-						value={ title }
+						aria-controls={'ac-' + uuid}
+						value={title}
 					/>
 					<div
-						id={ 'ac-' + uuid }
+						id={'ac-' + uuid}
 						className="c-accordion__content"
-						style={ contentStyles }
+						style={contentStyles}
 					>
 						<InnerBlocks.Content />
 					</div>

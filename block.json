@@ -1,5 +1,6 @@
 {
 	"apiVersion": "2",
+	"version": "1.7.0",
 	"name": "pb/accordion-item",
 	"title": "Accordion Item",
 	"category": "text",
@@ -13,6 +14,10 @@
 		"initiallyOpen": {
 			"type": "boolean",
 			"default": false
+		},
+		"openBreakpoint": {
+			"type": "number",
+			"default": 0
 		},
 		"clickToClose": {
 			"type": "boolean",
@@ -39,7 +44,21 @@
 		}
 	},
 	"supports": {
-		"anchor": true
+		"anchor": true,
+		"align": true,
+		"ariaLabel": true,
+		"className": true,
+		"spacing": {
+			"margin": true,
+			"padding": true,
+			"blockGap": true
+		},
+		"color": {
+			"gradients": true,
+			"background": true,
+			"text": true,
+			"link": true
+		}
 	},
 	"editorScript": "file:./build/index.js",
 	"editorStyle": "file:./build/index.css"
